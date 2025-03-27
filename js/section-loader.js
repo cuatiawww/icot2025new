@@ -1,53 +1,134 @@
-// section-loader.js
-// A utility script to load all section content in the correct order
+// section-loader.js - Handles loading all dynamic sections for ICOT 2025 website
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Section loader initialized');
+    
+    // We will not auto-load sections here - wait for Supabase to be ready
+    // The loading will be triggered from script.js after Supabase is initialized
+});
 
-document.addEventListener('DOMContentLoaded', async function() {
+// Make loadAllSections available globally
+window.loadAllSections = loadAllSections;
+
+// Main function to load all sections
+async function loadAllSections() {
+    console.log('Starting to load all sections');
     let supabase;
     
     try {
-        // Initialize Supabase client
-        supabase = window.initSupabase();
-        console.log('Supabase client initialized');
+        // Use the already initialized Supabase client
+        if (window.supabase) {
+            supabase = window.supabase;
+            console.log('Using existing Supabase client in section-loader');
+        } else {
+            console.log('No Supabase client found, initializing one');
+            try {
+                supabase = await window.initSupabase();
+            } catch (error) {
+                console.error('Failed to initialize Supabase:', error);
+                handleStaticSections();
+                return;
+            }
+        }
     } catch (error) {
-        console.error('Error initializing Supabase client:', error);
-        showNotification('Failed to connect to database. Please try refreshing the page.', 'error');
+        console.error('Error getting Supabase client:', error);
+        window.showNotification('Failed to connect to database. Please try refreshing the page.', 'error');
+        handleStaticSections();
         return;
     }
     
     // Get hero section as reference
     const heroSection = document.getElementById('home');
+    if (!heroSection) {
+        console.error('Hero section not found');
+        return;
+    }
+    
+    // Get about section as reference (should be static HTML)
+    const aboutSection = document.getElementById('about');
+    
+    // Define the reference section (where to start adding new sections)
+    let prevSection = aboutSection || heroSection;
     
     // Define sections in the order they should appear
     const sections = [
-        { id: 'about', title: 'About ICOT 2025', init: loadAboutSection },
-        { id: 'speakers', title: 'Keynote Speakers', init: loadSpeakersSection },
-        { id: 'committee', title: 'Organizing Committee', init: loadCommitteeSection },
-        { id: 'program', title: 'Program Schedule', init: loadProgramSection },
-        { id: 'dates', title: 'Important Dates', init: loadDatesSection },
-        { id: 'papers', title: 'Call For Papers', init: loadPapersSection },
-        { id: 'submission', title: 'Paper Submission', init: loadSubmissionSection },
-        { id: 'registration', title: 'Registration', init: loadRegistrationSection }
+        { id: 'speakers', title: 'Keynote Speakers', load: loadSpeakersSection },
+        { id: 'invited-speakers', title: 'Invited Speakers', load: loadInvitedSpeakersSection }, // New section
+        { id: 'committee', title: 'Organizing Committee', load: loadCommitteeSection },
+        { id: 'program', title: 'Program Schedule', load: loadSimpleTbaSection },
+        { id: 'dates', title: 'Important Dates', load: loadDatesSection },
+        { id: 'papers', title: 'Call For Papers', load: loadPapersSection },
+        
+        { id: 'submission', title: 'Paper Submission', load: loadSimpleTbaSection },
+        { id: 'registration', title: 'Registration', load: loadSimpleTbaSection }
     ];
     
-    // Initialize sections in order
-    let prevSection = heroSection;
+    // Load each section in sequence
     for (const section of sections) {
-        // Remove existing section if it's in the wrong position
+        // Skip if section already exists
         const existingSection = document.getElementById(section.id);
         if (existingSection) {
-            existingSection.remove();
+            console.log(`Section ${section.id} already exists, replacing content`);
+            
+            // For existing sections, update their content
+            try {
+                await section.load(supabase, existingSection, true);
+                prevSection = existingSection;
+            } catch (error) {
+                console.error(`Error updating existing section ${section.id}:`, error);
+                
+                // Reset to TBA state if error occurs
+                const contentContainer = existingSection.querySelector(`.${section.id}-content`);
+                if (contentContainer) {
+                    contentContainer.innerHTML = createTbaHTML(section.id, section.title);
+                }
+            }
+            
+            continue;
         }
         
-        // Create and position the section
-        await section.init(supabase, prevSection);
-        
-        // Update reference for next section
-        prevSection = document.getElementById(section.id) || prevSection;
+        // Create and load new section
+        try {
+            console.log(`Loading new section: ${section.id}`);
+            await section.load(supabase, prevSection);
+            
+            // Update reference for next section
+            const newSection = document.getElementById(section.id);
+            if (newSection) {
+                prevSection = newSection;
+                console.log(`Successfully loaded section: ${section.id}`);
+            } else {
+                console.warn(`Section ${section.id} was not created properly`);
+            }
+        } catch (error) {
+            console.error(`Error loading section ${section.id}:`, error);
+        }
     }
-});
+    
+    console.log('All sections loaded or updated');
+}
+
+// Handle static sections if Supabase fails
+function handleStaticSections() {
+    const staticSections = ['committee', 'program', 'dates', 'papers', 'submission', 'registration'];
+    
+    staticSections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            const contentContainer = section.querySelector(`.${sectionId}-content`);
+            if (contentContainer && contentContainer.querySelector('.loading-container')) {
+                contentContainer.innerHTML = createTbaHTML(sectionId);
+            }
+        }
+    });
+}
 
 // Helper function to insert a section after another section
 function insertAfter(newNode, referenceNode) {
+    if (!referenceNode) {
+        console.error('Reference node is null or undefined');
+        return;
+    }
+    
     if (referenceNode.nextSibling) {
         referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
     } else {
@@ -55,233 +136,297 @@ function insertAfter(newNode, referenceNode) {
     }
 }
 
-// Helper function to show notifications
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-        <span>${message}</span>
-        <button class="notification-close">&times;</button>
-    `;
-    
-    // Add to body
-    document.body.appendChild(notification);
-    
-    // Show notification
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 10);
-    
-    // Add close button functionality
-    const closeButton = notification.querySelector('.notification-close');
-    if (closeButton) {
-        closeButton.addEventListener('click', () => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        });
-    }
-    
-    // Auto hide after 5 seconds
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 5000);
-}
-
 /**
- * Load About Section data from Supabase
+ * Load Invited Speakers Section data from Supabase
  */
-async function loadAboutSection(supabase, prevSection) {
-    const sectionId = 'about';
+async function loadInvitedSpeakersSection(supabase, prevSection, isExisting = false) {
+    const sectionId = 'invited-speakers';
     
     try {
-        // Create about section element
-        const section = document.createElement('section');
-        section.id = sectionId;
-        section.className = 'about-section';
-        section.innerHTML = `
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title">About ICOT 2025</h2>
-                    <div class="section-divider"></div>
-                </div>
-                <div class="about-content">
-                    ${createLoadingHTML()}
-                </div>
-            </div>
-        `;
+        let section;
+        let contentContainer;
         
-        // Insert after previous section
-        insertAfter(section, prevSection);
-        
-        // Fetch data from Supabase
-        const { data, error } = await supabase
-            .from('about_content')
-            .select('*')
-            .single();
+        if (isExisting) {
+            // Use existing section
+            section = prevSection;
+            contentContainer = section.querySelector('.invited-speakers-content');
             
-        if (error && error.code !== 'PGRST116') throw error; // PGRST116 is the error code for no rows returned
-        
-        // Get content element
-        const contentElement = section.querySelector('.about-content');
-        
-        // If no data, show placeholder
-        if (!data) {
-            contentElement.innerHTML = `
-                <div class="about-text">
-                    <p>Information about ICOT 2025 will be coming soon.</p>
+            if (contentContainer) {
+                contentContainer.innerHTML = createLoadingHTML();
+            } else {
+                console.error('No content container found in existing invited speakers section');
+                return;
+            }
+        } else {
+            // Create invited speakers section element
+            section = document.createElement('section');
+            section.id = sectionId;
+            section.className = 'invited-speakers-section';
+            section.innerHTML = `
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Invited Speakers</h2>
+                        <div class="section-divider"></div>
+                    </div>
+                    <div class="invited-speakers-content">
+                        ${createLoadingHTML()}
+                    </div>
                 </div>
             `;
-            return;
-        }
-        
-        // Update title if exists
-        const titleElement = section.querySelector('.section-title');
-        if (titleElement && data.title) {
-            titleElement.textContent = data.title;
-        }
-        
-        // Update content
-        if (data.content) {
-            // Split content into paragraphs
-            const paragraphs = data.content.split('\n\n');
             
-            let paragraphsHtml = '<div class="about-text">';
-            paragraphs.forEach((paragraph, index) => {
-                paragraphsHtml += `
-                    <p class="${index === 0 ? 'first-paragraph' : ''}">${paragraph}</p>
+            // Insert after previous section
+            insertAfter(section, prevSection);
+            contentContainer = section.querySelector('.invited-speakers-content');
+        }
+        
+        console.log('Fetching invited speakers data from Supabase');
+        
+        try {
+            // Fetch invited speakers from Supabase
+            const { data: speakers, error } = await supabase
+                .from('invited_speakers') // Create this table in Supabase
+                .select('*')
+                .order('created_at', { ascending: true });
+                
+            if (error) {
+                console.error('Error fetching invited speakers:', error);
+                throw error;
+            }
+            
+            if (!speakers || speakers.length === 0) {
+                console.log('No invited speakers found, showing TBA state');
+                // No speakers found - show TBA state
+                contentContainer.innerHTML = createTbaHTML('invited-speakers', 'Invited Speakers');
+                return;
+            }
+            
+            console.log(`Found ${speakers.length} invited speakers, rendering them`);
+            
+            // Create speakers list HTML
+            let speakersHtml = '<div class="speakers-list invited-list">';
+            
+            speakers.forEach(speaker => {
+                speakersHtml += `
+                    <div class="speaker-card">
+                        <div class="speaker-content">
+                            <div class="speaker-profile">
+                                <div class="speaker-image-container">
+                                    <img src="${speaker.image_url || 'https://placehold.co/400x400/orange/white?text=Speaker'}" alt="${speaker.name}" class="speaker-image">
+                                </div>
+                                <div class="speaker-info">
+                                    <h3 class="speaker-name">${speaker.name || 'TBA'}</h3>
+                                    <p class="speaker-title invited">${speaker.title || 'Invited Speaker'}</p>
+                                    <p class="speaker-position">${speaker.position || ''}</p>
+                                    <p class="speaker-affiliation">${speaker.affiliation || ''}</p>
+                                </div>
+                            </div>
+
+                            <div class="speaker-details">
+                                <div class="speaker-bio">
+                                    <h4 class="detail-header">
+                                        Biography
+                                    </h4>
+                                    <p class="detail-content">${speaker.biography || 'Biography coming soon.'}</p>
+                                </div>
+
+                                <div class="speaker-presentation">
+                                    <h4 class="detail-header">
+                                        Presentation
+                                    </h4>
+                                    <h5 class="presentation-title">${speaker.presentation_title || 'To Be Announced'}</h5>
+                                    <p class="detail-content">${speaker.presentation_abstract || 'Abstract coming soon.'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 `;
             });
-            paragraphsHtml += '</div>';
             
-            contentElement.innerHTML = paragraphsHtml;
-        } else {
-            contentElement.innerHTML = '<p class="placeholder-text">About content coming soon.</p>';
+            speakersHtml += '</div>';
+            
+            // Update content
+            contentContainer.innerHTML = speakersHtml;
+            console.log('Invited speakers section rendered successfully');
+            
+        } catch (error) {
+            console.error('Error in Supabase query for invited speakers:', error);
+            // Show TBA state in case of any error
+            contentContainer.innerHTML = createTbaHTML('invited-speakers', 'Invited Speakers');
         }
         
     } catch (error) {
         console.error(`Error loading ${sectionId} section:`, error);
-        showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
+        window.showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
         
         // Set error state in the section
         const section = document.getElementById(sectionId);
-        const contentElement = section ? section.querySelector('.about-content') : null;
-        
-        if (contentElement) {
-            contentElement.innerHTML = createErrorHTML();
+        if (section) {
+            const contentContainer = section.querySelector('.invited-speakers-content');
+            
+            if (contentContainer) {
+                contentContainer.innerHTML = createErrorHTML();
+            }
         }
     }
 }
 
 /**
- * Load Speakers Section data from Supabase
+ * Load Speakers Section data from Supabase with enhanced modal biographies
  */
-async function loadSpeakersSection(supabase, prevSection) {
+async function loadSpeakersSection(supabase, prevSection, isExisting = false) {
     const sectionId = 'speakers';
     
     try {
-        // Create speakers section element
-        const section = document.createElement('section');
-        section.id = sectionId;
-        section.className = 'speakers-section';
-        section.innerHTML = `
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title">Keynote Speakers</h2>
-                    <div class="section-divider"></div>
-                </div>
-                <div class="speakers-content">
-                    ${createLoadingHTML()}
-                </div>
-            </div>
-        `;
+        let section;
+        let contentContainer;
         
-        // Insert after previous section
-        insertAfter(section, prevSection);
-        
-        // Get content container
-        const contentContainer = section.querySelector('.speakers-content');
-        
-        // Fetch speakers from Supabase
-        const { data: speakers, error } = await supabase
-            .from('speakers')
-            .select('*')
-            .order('created_at', { ascending: true });
+        if (isExisting) {
+            // Use existing section
+            section = prevSection;
+            contentContainer = section.querySelector('.speakers-content');
             
-        if (error) throw error;
-        
-        if (!speakers || speakers.length === 0) {
-            // No speakers found - show TBA state in the exact style from screenshot
-            contentContainer.innerHTML = `
-                <div class="tba-content">
-                    <h2 class="tba-main-title">To Be Announced</h2>
-                    <p class="tba-description">Our keynote speakers will be announced soon.</p>
-                    <div class="tba-icon-container">
-                        <svg class="tba-icon" fill="#f97316" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
-                        </svg>
+            if (contentContainer) {
+                contentContainer.innerHTML = createLoadingHTML();
+            } else {
+                console.error('No content container found in existing speakers section');
+                return;
+            }
+        } else {
+            // Create speakers section element
+            section = document.createElement('section');
+            section.id = sectionId;
+            section.className = 'speakers-section';
+            section.innerHTML = `
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Keynote Speakers</h2>
+                        <div class="section-divider"></div>
+                    </div>
+                    <div class="speakers-content">
+                        ${createLoadingHTML()}
+                    </div>
+                </div>
+                
+                <!-- Enhanced Modal for speaker biography -->
+                <div id="speakerBioModal" class="speaker-modal">
+                    <div class="speaker-modal-content">
+                        <div class="speaker-modal-header">
+                            <h3 class="speaker-modal-title">Speaker Biography</h3>
+                            <span class="speaker-modal-close">&times;</span>
+                        </div>
+                        <div class="speaker-modal-body">
+                            <div class="speaker-modal-profile">
+                                <div class="speaker-modal-image"></div>
+                                <div class="speaker-modal-info">
+                                    <h3 class="speaker-modal-name"></h3>
+                                    <p class="speaker-modal-position"></p>
+                                    <p class="speaker-modal-affiliation"></p>
+                                </div>
+                            </div>
+                            <div class="speaker-modal-bio-content"></div>
+                        </div>
                     </div>
                 </div>
             `;
-            return;
+            
+            // Insert after previous section
+            insertAfter(section, prevSection);
+            contentContainer = section.querySelector('.speakers-content');
         }
         
-        // Create speakers list HTML
-        let speakersHtml = '<div class="speakers-list">';
+        console.log('Fetching speakers data from Supabase');
         
-        speakers.forEach(speaker => {
-            speakersHtml += `
-                <div class="speaker-card">
-                    <div class="speaker-content">
-                        <div class="speaker-profile">
-                            <div class="speaker-image-container">
-                                <img src="${speaker.image_url}" alt="${speaker.name}" class="speaker-image">
+        try {
+            // Fetch speakers from Supabase
+            const { data: speakers, error } = await supabase
+                .from('speakers')
+                .select('*')
+                .order('created_at', { ascending: true });
+                
+            if (error) {
+                console.error('Error fetching speakers:', error);
+                throw error;
+            }
+            
+            if (!speakers || speakers.length === 0) {
+                console.log('No speakers found, showing TBA state');
+                // No speakers found - show TBA state
+                contentContainer.innerHTML = createTbaHTML('speakers', 'Keynote Speakers');
+                return;
+            }
+            
+            console.log(`Found ${speakers.length} speakers, rendering them`);
+            
+            // Create speakers list HTML
+            let speakersHtml = '<div class="speakers-list">';
+            
+            speakers.forEach((speaker, index) => {
+                // Create a placeholder if no image is available
+                const imageHtml = speaker.image_url 
+                    ? `<img src="${speaker.image_url}" alt="${speaker.name}" class="speaker-image">`
+                    : `<div class="speaker-placeholder" style="background-color: #ffab00; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+                        <span style="color: white; font-size: 1.8rem; font-weight: bold;">${speaker.name.split(' ').pop()}</span>
+                       </div>`;
+                
+                // Create a short bio version
+                const shortBiography = truncateBio(speaker.biography || 'Biography coming soon.', 150);
+                
+                speakersHtml += `
+                    <div class="speaker-card" data-speaker-index="${index}">
+                        <div class="speaker-content">
+                            <div class="speaker-profile">
+                                <div class="speaker-image-container">
+                                    ${imageHtml}
+                                </div>
+                                <div class="speaker-info">
+                                    <h3 class="speaker-name">${speaker.name || 'TBA'}</h3>
+                                    <p class="speaker-title">${speaker.title || ''}</p>
+                                    <p class="speaker-position">${speaker.position || ''}</p>
+                                    <p class="speaker-affiliation">${speaker.affiliation || ''}</p>
+                                </div>
                             </div>
-                            <div class="speaker-info">
-                                <h3 class="speaker-name">${speaker.name}</h3>
-                                <p class="speaker-title">${speaker.title || ''}</p>
-                                <p class="speaker-position">${speaker.position || ''}</p>
-                                <p class="speaker-affiliation">${speaker.affiliation || ''}</p>
-                            </div>
-                        </div>
 
-                        <div class="speaker-details">
-                            <div class="speaker-bio">
-                                <h4 class="detail-header">
-                                    <span class="detail-header-line"></span>
-                                    Biography
-                                </h4>
-                                <p class="detail-content">${speaker.biography || 'Biography coming soon.'}</p>
-                            </div>
-
-                            <div class="speaker-presentation">
-                                <h4 class="detail-header">
-                                    <span class="detail-header-line"></span>
-                                    Presentation
-                                </h4>
-                                <h5 class="presentation-title">${speaker.presentation_title || 'To Be Announced'}</h5>
-                                <p class="detail-content">${speaker.presentation_abstract || 'Abstract coming soon.'}</p>
+                            <div class="speaker-details">
+                                <div class="speaker-bio">
+                                    <h4 class="detail-header">Biography</h4>
+                                    <p class="detail-content short-bio">${shortBiography}</p>
+                                    <button class="bio-view-btn" data-speaker-index="${index}">Read More</button>
+                                    
+                                    <!-- Hidden full bio and data for modal -->
+                                    <div class="hidden-speaker-data" style="display: none;">
+                                        <div class="full-data">
+                                            <div class="data-image">${imageHtml}</div>
+                                            <div class="data-name">${speaker.name}</div>
+                                            <div class="data-position">${speaker.position || ''}</div>
+                                            <div class="data-affiliation">${speaker.affiliation || ''}</div>
+                                            <div class="data-biography">${speaker.biography || 'Biography coming soon.'}</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
-        });
-        
-        speakersHtml += '</div>';
-        
-        // Update content
-        contentContainer.innerHTML = speakersHtml;
+                `;
+            });
+            
+            speakersHtml += '</div>';
+            
+            // Update content
+            contentContainer.innerHTML = speakersHtml;
+            console.log('Speakers section rendered successfully');
+            
+            // Initialize modal functionality
+            initEnhancedSpeakerModals(speakers);
+            
+        } catch (error) {
+            console.error('Error in Supabase query for speakers:', error);
+            // Show TBA state in case of any error
+            contentContainer.innerHTML = createTbaHTML('speakers', 'Keynote Speakers');
+        }
         
     } catch (error) {
         console.error(`Error loading ${sectionId} section:`, error);
-        showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
+        window.showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
         
         // Set error state in the section
         const section = document.getElementById(sectionId);
@@ -295,118 +440,343 @@ async function loadSpeakersSection(supabase, prevSection) {
     }
 }
 
+// Helper function to truncate biography text for short version
+function truncateBio(text, maxLength) {
+    if (!text || text.length <= maxLength) return text;
+    
+    // Find the last space before maxLength to avoid cutting words
+    const lastSpace = text.substring(0, maxLength).lastIndexOf(' ');
+    const truncated = text.substring(0, lastSpace > 0 ? lastSpace : maxLength);
+    
+    return truncated + '...';
+}
+
+// Function to initialize enhanced modal functionality for speaker biographies
+function initEnhancedSpeakerModals(speakers) {
+    // Get modal element
+    const modal = document.getElementById('speakerBioModal');
+    const modalImage = modal.querySelector('.speaker-modal-image');
+    const modalName = modal.querySelector('.speaker-modal-name');
+    const modalPosition = modal.querySelector('.speaker-modal-position');
+    const modalAffiliation = modal.querySelector('.speaker-modal-affiliation');
+    const modalBioContent = modal.querySelector('.speaker-modal-bio-content');
+    const closeBtn = modal.querySelector('.speaker-modal-close');
+    
+    // Get all bio view buttons
+    const bioViewBtns = document.querySelectorAll('.bio-view-btn');
+    
+    // Add click event to all bio view buttons
+    bioViewBtns.forEach(button => {
+        button.addEventListener('click', function() {
+            // Get speaker index
+            const speakerIndex = parseInt(this.getAttribute('data-speaker-index'));
+            
+            // Find the hidden data
+            const speakerCard = this.closest('.speaker-card');
+            const hiddenData = speakerCard.querySelector('.hidden-speaker-data .full-data');
+            
+            // Get data from hidden element
+            const image = hiddenData.querySelector('.data-image').innerHTML;
+            const name = hiddenData.querySelector('.data-name').textContent;
+            const position = hiddenData.querySelector('.data-position').textContent;
+            const affiliation = hiddenData.querySelector('.data-affiliation').textContent;
+            const biography = hiddenData.querySelector('.data-biography').textContent;
+            
+            // Set modal content
+            modalImage.innerHTML = image;
+            modalName.textContent = name;
+            modalPosition.textContent = position;
+            modalAffiliation.textContent = affiliation;
+            
+            // Format biography with paragraphs
+            const formattedBio = formatBiographyText(biography);
+            modalBioContent.innerHTML = formattedBio;
+            
+            // Show modal
+            modal.style.display = 'block';
+            document.body.classList.add('modal-open'); // Add class to prevent background scrolling
+        });
+    });
+    
+    // Close modal when clicking the close button
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    });
+    
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+    });
+    
+    // Close modal with escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+    });
+}
+
+// Helper function to format biography text with proper paragraphs
+function formatBiographyText(text) {
+    if (!text) return '';
+    
+    // Replace double line breaks with paragraph tags
+    return text.split('\n\n')
+        .filter(paragraph => paragraph.trim() !== '')
+        .map(paragraph => `<p>${paragraph.trim()}</p>`)
+        .join('');
+}
+
+// Helper function to truncate biography text for short version
+function truncateBio(text, maxLength) {
+    if (!text || text.length <= maxLength) return text;
+    
+    // Find the last space before maxLength to avoid cutting words
+    const lastSpace = text.substring(0, maxLength).lastIndexOf(' ');
+    const truncated = text.substring(0, lastSpace > 0 ? lastSpace : maxLength);
+    
+    return truncated + '...';
+}
+
+// Function to initialize modal functionality for speaker biographies
+function initSpeakerModals() {
+    // Get modal element
+    const modal = document.getElementById('speakerBioModal');
+    const modalBody = modal.querySelector('.speaker-modal-body');
+    const closeBtn = modal.querySelector('.speaker-modal-close');
+    
+    // Get all bio view buttons
+    const bioViewBtns = document.querySelectorAll('.bio-view-btn');
+    
+    // Add click event to all bio view buttons
+    bioViewBtns.forEach(button => {
+        button.addEventListener('click', function() {
+            // Find the hidden bio content
+            const speakerBio = this.closest('.speaker-bio');
+            const hiddenBio = speakerBio.querySelector('.hidden-bio');
+            
+            // Set modal content
+            modalBody.innerHTML = hiddenBio.innerHTML;
+            
+            // Show modal
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+        });
+    });
+    
+    // Close modal when clicking the close button
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // Re-enable scrolling
+    });
+    
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+    });
+    
+    // Close modal with escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = 'none';
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+    });
+}
+// Helper function to truncate biography text for short version
+function truncateBio(text, maxLength) {
+    if (!text || text.length <= maxLength) return text;
+    
+    // Find the last space before maxLength to avoid cutting words
+    const lastSpace = text.substring(0, maxLength).lastIndexOf(' ');
+    const truncated = text.substring(0, lastSpace > 0 ? lastSpace : maxLength);
+    
+    return truncated + '...';
+}
+
+// Function to initialize toggle buttons for biographies
+function initBioToggleButtons() {
+    // Find all bio toggle buttons
+    const bioToggleBtns = document.querySelectorAll('.bio-toggle-btn');
+    
+    // Add click event to each button
+    bioToggleBtns.forEach(button => {
+        button.addEventListener('click', function() {
+            // Find the parent bio section
+            const bioSection = this.closest('.speaker-bio');
+            
+            // Find short and full bio elements
+            const shortBio = bioSection.querySelector('.short-bio');
+            const fullBio = bioSection.querySelector('.full-bio');
+            
+            // Toggle visibility
+            if (fullBio.style.display === 'none') {
+                // Show full bio
+                shortBio.style.display = 'none';
+                fullBio.style.display = 'block';
+                this.textContent = 'Read Less';
+                this.classList.add('active');
+            } else {
+                // Show short bio
+                shortBio.style.display = 'block';
+                fullBio.style.display = 'none';
+                this.textContent = 'Read More';
+                this.classList.remove('active');
+            }
+        });
+    });
+}
 /**
  * Load Committee Section data from Supabase
  */
-async function loadCommitteeSection(supabase, prevSection) {
+async function loadCommitteeSection(supabase, prevSection, isExisting = false) {
     const sectionId = 'committee';
     
     try {
-        // Create committee section element
-        const section = document.createElement('section');
-        section.id = sectionId;
-        section.className = 'committee-section';
-        section.innerHTML = `
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title">Organizing Committee</h2>
-                    <div class="section-divider"></div>
-                </div>
-                <div class="committee-content">
-                    ${createLoadingHTML()}
-                </div>
-            </div>
-        `;
+        let section;
+        let contentElement;
         
-        // Insert after previous section
-        insertAfter(section, prevSection);
-        
-        // Get content element
-        const contentElement = section.querySelector('.committee-content');
-        
-        // Fetch committee categories from Supabase
-        const { data: categoriesData, error: categoriesError } = await supabase
-            .from('committee_categories')
-            .select('*')
-            .order('order_number');
+        if (isExisting) {
+            // Use existing section
+            section = prevSection;
+            contentElement = section.querySelector('.committee-content');
             
-        if (categoriesError) throw categoriesError;
-        
-        // If no categories, show TBA section exactly like in the screenshot
-        if (!categoriesData || categoriesData.length === 0) {
-            contentElement.innerHTML = `
-                <div class="tba-content">
-                    <h2 class="tba-main-title">To Be Announced</h2>
-                    <p class="tba-description">Our organizing committee will be announced soon.</p>
-                    <div class="tba-icon-container">
-                        <svg class="tba-icon" fill="#f97316" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
-                        </svg>
+            if (contentElement) {
+                contentElement.innerHTML = createLoadingHTML();
+            } else {
+                console.error('No content container found in existing committee section');
+                return;
+            }
+        } else {
+            // Create committee section element
+            section = document.createElement('section');
+            section.id = sectionId;
+            section.className = 'committee-section';
+            section.innerHTML = `
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Organizing Committee</h2>
+                        <div class="section-divider"></div>
+                    </div>
+                    <div class="committee-content">
+                        ${createLoadingHTML()}
                     </div>
                 </div>
             `;
-            return;
+            
+            // Insert after previous section
+            insertAfter(section, prevSection);
+            contentElement = section.querySelector('.committee-content');
         }
         
-        // Fetch members for each category
-        const categoriesWithMembers = await Promise.all(
-            categoriesData.map(async (category) => {
-                const { data: membersData, error: membersError } = await supabase
-                    .from('committee_members')
-                    .select('*')
-                    .eq('category_id', category.id)
-                    .order('order_number');
+        try {
+            // Fetch committee categories from Supabase
+            const { data: categoriesData, error: categoriesError } = await supabase
+                .from('committee_categories')
+                .select('*')
+                .order('order_number');
                 
-                if (membersError) throw membersError;
-                
-                return {
-                    ...category,
-                    members: membersData || []
-                };
-            })
-        );
-        
-        // Create HTML for committee categories
-        let categoriesHtml = '<div class="committee-categories">';
-        
-        // Add each category
-        categoriesWithMembers.forEach(category => {
-            categoriesHtml += `
-                <div class="committee-category">
-                    <div class="category-header">
-                        <h3 class="category-title">${category.title}</h3>
-                    </div>
-                    
-                    <div class="category-content">
-                        <div class="members-grid">
-            `;
+            if (categoriesError) {
+                console.error('Error fetching committee categories:', categoriesError);
+                throw categoriesError;
+            }
             
-            // Add each member
-            category.members.forEach(member => {
+            // If no categories, show TBA section
+            if (!categoriesData || categoriesData.length === 0) {
+                contentElement.innerHTML = createTbaHTML('committee', 'Organizing Committee');
+                return;
+            }
+            
+            // Fetch members for each category
+            const categoriesWithMembers = await Promise.all(
+                categoriesData.map(async (category) => {
+                    try {
+                        const { data: membersData, error: membersError } = await supabase
+                            .from('committee_members')
+                            .select('*')
+                            .eq('category_id', category.id)
+                            .order('order_number');
+                        
+                        if (membersError) {
+                            console.error(`Error fetching members for category ${category.id}:`, membersError);
+                            throw membersError;
+                        }
+                        
+                        return {
+                            ...category,
+                            members: membersData || []
+                        };
+                    } catch (error) {
+                        console.error(`Error processing category ${category.id}:`, error);
+                        return {
+                            ...category,
+                            members: []
+                        };
+                    }
+                })
+            );
+            
+            // Create HTML for committee categories
+            let categoriesHtml = '<div class="committee-categories">';
+            
+            // Add each category
+            categoriesWithMembers.forEach(category => {
                 categoriesHtml += `
-                    <div class="committee-member">
-                        <h4 class="member-name">${member.name}</h4>
-                        <p class="member-affiliation">${member.affiliation || ''}</p>
+                    <div class="committee-category">
+                        <div class="category-header">
+                            <h3 class="category-title">${category.title || 'Committee'}</h3>
+                        </div>
+                        
+                        <div class="category-content">
+                            <div class="members-grid">
+                `;
+                
+                // Add each member
+                if (category.members && category.members.length > 0) {
+                    category.members.forEach(member => {
+                        categoriesHtml += `
+                            <div class="committee-member">
+                                <h4 class="member-name">${member.name || 'TBA'}</h4>
+                                <p class="member-affiliation">${member.affiliation || ''}</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    categoriesHtml += `
+                        <div class="committee-member">
+                            <p>Members to be announced</p>
+                        </div>
+                    `;
+                }
+                
+                categoriesHtml += `
+                            </div>
+                        </div>
                     </div>
                 `;
             });
             
-            categoriesHtml += `
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        categoriesHtml += '</div>';
-        
-        // Update content
-        contentElement.innerHTML = categoriesHtml;
+            categoriesHtml += '</div>';
+            
+            // Update content
+            contentElement.innerHTML = categoriesHtml;
+            
+        } catch (supabaseError) {
+            console.error('Supabase error in committee section:', supabaseError);
+            contentElement.innerHTML = createTbaHTML('committee', 'Organizing Committee');
+        }
         
     } catch (error) {
         console.error(`Error loading ${sectionId} section:`, error);
-        showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
+        window.showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
         
         // Set error state in the section
         const section = document.getElementById(sectionId);
@@ -417,178 +787,81 @@ async function loadCommitteeSection(supabase, prevSection) {
         }
     }
 }
-
 /**
- * Load Program Section data from Supabase
+ * Load Dates Section with static data
  */
-async function loadProgramSection(supabase, prevSection) {
-    const sectionId = 'program';
-    
-    try {
-        // Create program section element
-        const section = document.createElement('section');
-        section.id = sectionId;
-        section.className = 'program-section';
-        section.innerHTML = `
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title">Program Schedule</h2>
-                    <div class="section-divider"></div>
-                </div>
-                <div class="program-content">
-                    ${createLoadingHTML()}
-                </div>
-            </div>
-        `;
-        
-        // Insert after previous section
-        insertAfter(section, prevSection);
-        
-        // Get content element
-        const contentElement = section.querySelector('.program-content');
-        
-        // Fetch program schedule from Supabase
-        const { data, error } = await supabase
-            .from('program_schedules')
-            .select('*')
-            .order('updated_at', { ascending: false })
-            .limit(1)
-            .single();
-            
-        if (error && error.code !== 'PGRST116') throw error; // PGRST116 is the error code for no rows returned
-        
-        // If no schedule, show TBA section exactly like in the screenshot
-        if (!data) {
-            contentElement.innerHTML = `
-                <div class="tba-content">
-                    <h2 class="tba-main-title">To Be Announced</h2>
-                    <p class="tba-description">Program schedule will be announced closer to the conference date.</p>
-                    <div class="tba-icon-container">
-                        <svg class="tba-icon" fill="#f97316" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
-                        </svg>
-                    </div>
-                </div>
-            `;
-            return;
-        }
-        
-        // Create HTML for program schedule with PDF viewer
-        const scheduleHtml = `
-            <div class="program-schedule-container">
-                <div class="program-header">
-                    <h3 class="program-title">${data.title}</h3>
-                    
-                        href="${data.pdf_url}"
-                        download
-                        class="download-button"
-                    >
-                        <svg
-                            class="download-icon"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                        Download PDF
-                    </a>
-                </div>
-
-                <div class="pdf-container">
-                    <iframe
-                        src="${data.pdf_url}#toolbar=0"
-                        class="pdf-viewer"
-                        title="Program Schedule PDF"
-                    ></iframe>
-                </div>
-            </div>
-        `;
-        
-        // Update content
-        contentElement.innerHTML = scheduleHtml;
-        
-    } catch (error) {
-        console.error(`Error loading ${sectionId} section:`, error);
-        showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
-        
-        // Set error state in the section
-        const section = document.getElementById(sectionId);
-        const contentElement = section ? section.querySelector('.program-content') : null;
-        
-        if (contentElement) {
-            contentElement.innerHTML = createErrorHTML();
-        }
-    }
-}
-
-/**
- * Load Dates Section data 
- */
-async function loadDatesSection(supabase, prevSection) {
+async function loadDatesSection(supabase, prevSection, isExisting = false) {
     const sectionId = 'dates';
     
     try {
-        // Create dates section element
-        const section = document.createElement('section');
-        section.id = sectionId;
-        section.className = 'dates-section';
-        section.innerHTML = `
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title">Important Dates</h2>
-                    <div class="section-divider"></div>
-                </div>
-                <div class="dates-content">
-                    ${createLoadingHTML()}
-                </div>
-            </div>
-        `;
+        let section;
+        let contentElement;
         
-        // Insert after previous section
-        insertAfter(section, prevSection);
-        
-        // Get content element
-        const contentElement = section.querySelector('.dates-content');
+        if (isExisting) {
+            // Use existing section
+            section = prevSection;
+            contentElement = section.querySelector('.dates-content');
+            
+            if (contentElement) {
+                contentElement.innerHTML = createLoadingHTML();
+            } else {
+                console.error('No content container found in existing dates section');
+                return;
+            }
+        } else {
+            // Create dates section element
+            section = document.createElement('section');
+            section.id = sectionId;
+            section.className = 'dates-section';
+            section.innerHTML = `
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Important Dates</h2>
+                        <div class="section-divider"></div>
+                    </div>
+                    <div class="dates-content">
+                        ${createLoadingHTML()}
+                    </div>
+                </div>
+            `;
+            
+            // Insert after previous section
+            insertAfter(section, prevSection);
+            contentElement = section.querySelector('.dates-content');
+        }
         
         // Static dates data
-        // In a real app, you would fetch this from Supabase
         const dates = [
             {
                 label: "Full Paper Submission",
-                date: "30 Juni 2025",
+                date: "30 June 2025",
                 type: "deadline"
-              },
-              {
+            },
+            {
                 label: "Notification of Acceptance",
-                date: "31 Juli 2025",
+                date: "31 July 2025",
                 type: "normal" 
-              },
-              {
+            },
+            {
                 label: "Camera Ready Paper Submission",
                 date: "15 September 2025",
                 type: "normal"
-              },
-              {
+            },
+            {
                 label: "Early Bird Registration",
                 date: "20 - 30 September 2025",
                 type: "normal"
-              },
-              {
+            },
+            {
                 label: "Registration Deadline",
                 date: "18 October 2025",
                 type: "normal"
-              },
-              {
+            },
+            {
                 label: "Conference",
                 date: "27-30 October 2025",
                 type: "highlight"
-              }
+            }
         ];
         
         // Create HTML for timeline
@@ -626,7 +899,7 @@ async function loadDatesSection(supabase, prevSection) {
         
     } catch (error) {
         console.error(`Error loading ${sectionId} section:`, error);
-        showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
+        window.showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
         
         // Set error state in the section
         const section = document.getElementById(sectionId);
@@ -639,24 +912,74 @@ async function loadDatesSection(supabase, prevSection) {
 }
 
 /**
- * Load Papers Section data from Supabase
- */
-async function loadPapersSection(supabase, prevSection) {
-    const sectionId = 'papers';
+ * Simple TBA section loader for sections that don't have data yet
+ */async function loadSimpleTbaSection(supabase, prevSection, isExisting = false) {
+    // Get the section ID from the prevSection if it's an existing section
+    let sectionId;
+    
+    if (isExisting) {
+        sectionId = prevSection.id;
+    } else {
+        // For new sections, determine which section type to create based on prevSection
+        // Check which section comes after the prevSection in the sections array
+        const sectionOrder = ['about', 'speakers', 'invited-speakers', 'committee', 'program', 'dates', 'papers', 'submission', 'registration'];
+        const prevIndex = sectionOrder.indexOf(prevSection.id);
+        if (prevIndex >= 0 && prevIndex < sectionOrder.length - 1) {
+            sectionId = sectionOrder[prevIndex + 1];
+        } else {
+            console.error('Could not determine next section ID for TBA section');
+            return;
+        }
+    }
+    
+    if (!sectionId) {
+        console.error('Could not determine section ID for TBA section');
+        return;
+    }
+    
+    // Map section IDs to titles
+    const sectionTitles = {
+        'program': 'Program Schedule',
+        'papers': 'Call For Papers',
+        'submission': 'Paper Submission',
+        'registration': 'Registration',
+        'speakers': 'Keynote Speakers',
+        'invited-speakers': 'Invited Speakers',
+        'committee': 'Organizing Committee',
+        'dates': 'Important Dates'
+    };
+    
+    const title = sectionTitles[sectionId] || 'Information';
     
     try {
-        // Create section element
-        const section = document.createElement('section');
+        let section;
+        let contentElement;
+        
+        if (isExisting) {
+            // Use existing section
+            section = prevSection;
+            contentElement = section.querySelector(`.${sectionId}-content`);
+            
+            if (contentElement) {
+                contentElement.innerHTML = createTbaHTML(sectionId, title);
+            } else {
+                console.error(`No content container found in existing ${sectionId} section`);
+            }
+            return;
+        }
+        
+        // Create new section element
+        section = document.createElement('section');
         section.id = sectionId;
-        section.className = 'papers-section';
+        section.className = `${sectionId}-section`;
         section.innerHTML = `
             <div class="section-container">
                 <div class="section-header">
-                    <h2 class="section-title">Call For Papers</h2>
+                    <h2 class="section-title">${title}</h2>
                     <div class="section-divider"></div>
                 </div>
-                <div class="papers-content">
-                    ${createLoadingHTML()}
+                <div class="${sectionId}-content">
+                    ${createTbaHTML(sectionId, title)}
                 </div>
             </div>
         `;
@@ -664,162 +987,11 @@ async function loadPapersSection(supabase, prevSection) {
         // Insert after previous section
         insertAfter(section, prevSection);
         
-        // Get content element
-        const contentElement = section.querySelector('.papers-content');
-        
-        // For now, just display TBA
-        setTimeout(() => {
-            contentElement.innerHTML = `
-                <div class="tba-content">
-                    <h2 class="tba-main-title">To Be Announced</h2>
-                    <p class="tba-description">Call for papers information will be available soon.</p>
-                    <div class="tba-icon-container">
-                        <svg class="tba-icon" fill="#f97316" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
-                        </svg>
-                    </div>
-                </div>
-            `;
-        }, 500);
-        
     } catch (error) {
         console.error(`Error loading ${sectionId} section:`, error);
-        showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
-        
-        // Set error state in the section
-        const section = document.getElementById(sectionId);
-        if (section) {
-            const contentElement = section.querySelector('.papers-content');
-            if (contentElement) {
-                contentElement.innerHTML = createErrorHTML();
-            }
-        }
+        window.showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
     }
 }
-
-/**
- * Load Submission Section data from Supabase
- */
-async function loadSubmissionSection(supabase, prevSection) {
-    const sectionId = 'submission';
-    
-    try {
-        // Create section element
-        const section = document.createElement('section');
-        section.id = sectionId;
-        section.className = 'submission-section';
-        section.innerHTML = `
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title">Paper Submission</h2>
-                    <div class="section-divider"></div>
-                </div>
-                <div class="submission-content">
-                    ${createLoadingHTML()}
-                </div>
-            </div>
-        `;
-        
-        // Insert after previous section
-        insertAfter(section, prevSection);
-        
-        // Get content element
-        const contentElement = section.querySelector('.submission-content');
-        
-        // For now, just display TBA
-        setTimeout(() => {
-            contentElement.innerHTML = `
-                <div class="tba-content">
-                    <h2 class="tba-main-title">To Be Announced</h2>
-                    <p class="tba-description">Submission guidelines will be available soon.</p>
-                    <div class="tba-icon-container">
-                        <svg class="tba-icon" fill="#f97316" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
-                        </svg>
-                    </div>
-                </div>
-            `;
-        }, 500);
-        
-    } catch (error) {
-        console.error(`Error loading ${sectionId} section:`, error);
-        showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
-        
-        // Set error state in the section
-        const section = document.getElementById(sectionId);
-        if (section) {
-            const contentElement = section.querySelector('.submission-content');
-            if (contentElement) {
-                contentElement.innerHTML = createErrorHTML();
-            }
-        }
-    }
-}
-
-/**
- * Load Registration Section data from Supabase
- */
-async function loadRegistrationSection(supabase, prevSection) {
-    const sectionId = 'registration';
-    
-    try {
-        // Create section element
-        const section = document.createElement('section');
-        section.id = sectionId;
-        section.className = 'registration-section';
-        section.innerHTML = `
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title">Registration</h2>
-                    <div class="section-divider"></div>
-                </div>
-                <div class="registration-content">
-                    ${createLoadingHTML()}
-                </div>
-            </div>
-        `;
-        
-        // Insert after previous section
-        insertAfter(section, prevSection);
-        
-        // Get content element
-        const contentElement = section.querySelector('.registration-content');
-        
-        // For now, just display TBA
-        setTimeout(() => {
-            contentElement.innerHTML = `
-                <div class="tba-content">
-                    <h2 class="tba-main-title">To Be Announced</h2>
-                    <p class="tba-description">Registration details will be available closer to the conference date.</p>
-                    <div class="tba-icon-container">
-                        <svg class="tba-icon" fill="#f97316" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
-                        </svg>
-                    </div>
-                </div>
-            `;
-        }, 500);
-        
-    } catch (error) {
-        console.error(`Error loading ${sectionId} section:`, error);
-        showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
-        
-        // Set error state in the section
-        const section = document.getElementById(sectionId);
-        if (section) {
-            const contentElement = section.querySelector('.registration-content');
-            if (contentElement) {
-                contentElement.innerHTML = createErrorHTML();
-            }
-        }
-    }
-}
-
-// Utility Functions
-
 /**
  * Create loading HTML
  */
@@ -828,6 +1000,37 @@ function createLoadingHTML() {
         <div class="loading-container">
             <div class="loading-spinner"></div>
             <p class="loading-text">Loading content...</p>
+        </div>
+    `;
+}
+
+/**
+ * Create TBA (To Be Announced) HTML
+ */
+function createTbaHTML(sectionId, title = 'Information') {
+    // Map section IDs to appropriate icons
+    const icons = {
+        'speakers': 'user-tie',
+        'invited-speakers': 'user-graduate', // Added icon for invited speakers
+        'committee': 'users',
+        'program': 'calendar-alt',
+        'dates': 'calendar-day',
+        'papers': 'file-alt',
+        'submission': 'upload',
+        'registration': 'user-plus'
+    };
+    
+    const icon = icons[sectionId] || 'info-circle';
+    
+    return `
+        <div class="tba-container">
+            <div class="tba-box">
+                <div class="tba-icon">
+                    <i class="fas fa-${icon}"></i>
+                </div>
+               <h3 class="tba-title">To Be Announced</h3>
+                <p class="tba-text">${title} will be available soon.</p>
+            </div>
         </div>
     `;
 }
@@ -847,24 +1050,213 @@ function createErrorHTML() {
 }
 
 /**
- * Create a section skeleton
+ * Load Call For Papers Section from Supabase
  */
-function createSectionSkeleton(id, title, className) {
-    const section = document.createElement('section');
-    section.id = id;
-    section.className = className || '';
+/**
+ * Load Call For Papers Section from Supabase
+ */
+async function loadPapersSection(supabase, prevSection, isExisting = false) {
+    const sectionId = 'papers';
     
-    section.innerHTML = `
-        <div class="section-container">
-            <div class="section-header">
-                <h2 class="section-title">${title}</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="${id}-content">
-                ${createLoadingHTML()}
-            </div>
-        </div>
-    `;
-    
-    return section;
+    try {
+        let section;
+        let contentElement;
+        
+        if (isExisting) {
+            // Use existing section
+            section = prevSection;
+            contentElement = section.querySelector('.papers-content');
+            
+            if (contentElement) {
+                contentElement.innerHTML = createLoadingHTML();
+            } else {
+                console.error('No content container found in existing papers section');
+                return;
+            }
+        } else {
+            // Create papers section element
+            section = document.createElement('section');
+            section.id = sectionId;
+            section.className = 'papers-section';
+            section.innerHTML = `
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Call For Papers</h2>
+                        <div class="section-divider"></div>
+                    </div>
+                    <div class="papers-content">
+                        ${createLoadingHTML()}
+                    </div>
+                </div>
+            `;
+            
+            // Insert after previous section
+            insertAfter(section, prevSection);
+            contentElement = section.querySelector('.papers-content');
+        }
+        
+        try {
+            // Fetch intro content
+            const { data: introData, error: introError } = await supabase
+                .from('call_for_papers_intro')
+                .select('content')
+                .order('created_at', { ascending: false })
+                .limit(1);
+                
+            if (introError) {
+                console.error('Error fetching call for papers intro:', introError);
+                throw introError;
+            }
+            
+            // Fetch categories
+            const { data: categories, error: categoriesError } = await supabase
+                .from('paper_categories')
+                .select('*')
+                .order('order_number');
+                
+            if (categoriesError) {
+                console.error('Error fetching paper categories:', categoriesError);
+                throw categoriesError;
+            }
+            
+            // Fetch all topics
+            const { data: topics, error: topicsError } = await supabase
+                .from('paper_topics')
+                .select('*')
+                .order('order_number');
+                
+            if (topicsError) {
+                console.error('Error fetching paper topics:', topicsError);
+                throw topicsError;
+            }
+            
+            // If no data, show TBA
+            if (!introData || introData.length === 0) {
+                contentElement.innerHTML = createTbaHTML('papers', 'Call For Papers');
+                return;
+            }
+            
+            // Extract introduction, conference policy, and important dates from the intro content
+            let introContent = introData[0].content || '';
+            
+            // Separate intro text, conference policy, and dates if they exist in the intro content
+            let introText = '';
+            let policyText = '';
+            let datesText = '';
+            
+            if (introContent.includes('**Conference Policy:**') && introContent.includes('**Important Dates:**')) {
+                const policyParts = introContent.split('**Conference Policy:**');
+                introText = policyParts[0].trim();
+                
+                const datesParts = policyParts[1].split('**Important Dates:**');
+                policyText = '**Conference Policy:**' + datesParts[0];
+                datesText = '**Important Dates:**' + datesParts[1];
+            } else if (introContent.includes('**Important Dates:**')) {
+                const parts = introContent.split('**Important Dates:**');
+                introText = parts[0].trim();
+                datesText = '**Important Dates:**' + parts[1];
+            } else {
+                introText = introContent;
+            }
+            
+            // Group topics by category
+            const topicsByCategory = {};
+            if (categories) {
+                categories.forEach(category => {
+                    topicsByCategory[category.id] = {
+                        title: category.title,
+                        topics: []
+                    };
+                });
+            }
+            
+            if (topics) {
+                topics.forEach(topic => {
+                    if (topicsByCategory[topic.category_id]) {
+                        topicsByCategory[topic.category_id].topics.push(topic);
+                    }
+                });
+            }
+            
+            // Start building HTML - begin with intro text (without dates)
+            let papersHtml = `
+                <div class="papers-container">
+                    <div class="papers-intro">
+                        ${introText ? formatMarkdown(introText) : ''}
+                    </div>
+            `;
+            
+            // Add topics right after intro, before dates
+            if (Object.keys(topicsByCategory).length > 0) {
+                papersHtml += `<div class="paper-topics">`;
+                
+                Object.values(topicsByCategory).forEach(category => {
+                    if (category.topics.length > 0) {
+                        papersHtml += `
+                            <div class="paper-category">
+                                <h3 class="category-title">${category.title}</h3>
+                                <ul class="topics-list">
+                        `;
+                        
+                        category.topics.forEach(topic => {
+                            papersHtml += `<li>${topic.topic_name}</li>`;
+                        });
+                        
+                        papersHtml += `
+                                </ul>
+                            </div>
+                        `;
+                    }
+                });
+                
+                papersHtml += `</div>`;
+            }
+            
+            // Add conference policy after topics
+            if (policyText) {
+                papersHtml += `
+                    <div class="papers-policy">
+                        ${formatMarkdown(policyText)}
+                    </div>
+                `;
+            }
+            
+            // Add dates section after conference policy
+            if (datesText) {
+                papersHtml += `
+                    <div class="papers-dates">
+                        ${formatMarkdown(datesText)}
+                    </div>
+                `;
+            }
+            
+            papersHtml += `</div>`;
+            
+            // Update the content
+            contentElement.innerHTML = papersHtml;
+            
+        } catch (error) {
+            console.error('Error loading papers section data:', error);
+            contentElement.innerHTML = createTbaHTML('papers', 'Call For Papers');
+        }
+        
+    } catch (error) {
+        console.error(`Error loading ${sectionId} section:`, error);
+        const section = document.getElementById(sectionId);
+        if (section) {
+            const contentElement = section.querySelector('.papers-content');
+            if (contentElement) {
+                contentElement.innerHTML = createErrorHTML();
+            }
+        }
+    }
+}
+
+// Helper function to format markdown content
+function formatMarkdown(content) {
+    // Basic markdown formatting
+    return content
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') // Bold
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>') // Italic
+        .replace(/\n/g, '<br>'); // Line breaks
 }
