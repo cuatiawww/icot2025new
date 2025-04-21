@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keynote & Invited Speakers - IEEE-13th ICOT 2025</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Banner - Always visible -->
+    <div class="banner">
+        <div class="banner-container">
+            <span class="banner-text">IEEE-13th ICOT 2025 !!! Conference Date (October 27 ~ 29, 2025) !!!</span>
+            <button class="banner-button" onclick="window.location.href='keynote-speech.html'">Keynote Speech</button>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="navbar-container">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                </div>
+                <span class="logo-text">ICOT 2025 IEEE-13th International Conference</span>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <button class="nav-link" onclick="window.location.href='index.html#home'">Home</button>
+                <button class="nav-link" onclick="window.location.href='index.html#about'">About</button>
+                <button class="nav-link" onclick="window.location.href='index.html#speakers'">Speakers</button>
+                <button class="nav-link" onclick="window.location.href='index.html#program'">Program</button>
+                <button class="nav-link" onclick="window.location.href='index.html#committee'">Committee</button>
+                <button class="nav-link" onclick="window.location.href='index.html#dates'">Dates</button>
+                <button class="nav-link" onclick="window.location.href='index.html#papers'">Papers</button>
+                <button class="nav-link" onclick="window.location.href='index.html#submission'">Submission</button>
+                <button class="nav-link" onclick="window.location.href='index.html#registration'">Registration</button>
+            </nav>
+
+            <!-- Mobile menu button -->
+            <div class="mobile-menu-button">
+                <button id="menuToggle">
+                    <i class="fas fa-bars" id="menuIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-items">
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#home'">Home</button>
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#about'">About</button>
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#speakers'">Speakers</button>
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#program'">Program</button>
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#committee'">Committee</button>
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#dates'">Dates</button>
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#papers'">Papers</button>
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#submission'">Submission</button>
+                <button class="mobile-nav-link" onclick="window.location.href='index.html#registration'">Registration</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="main-content">
+        <section class="keynote-page">
+            <div class="keynote-container">
+                <a href="index.html" class="back-button">Back to Conference Home</a>
+                
+                <div class="keynote-header">
+                    <h1 class="keynote-title">Keynote & Invited Speakers</h1>
+                    <div class="keynote-divider"></div>
+                </div>
+                
+                <!-- Speaker details will be loaded dynamically here -->
+                <div id="speaker-details-container">
+                    <div class="loading-container" id="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text">Loading speaker information...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Footer Top Section with Logo and Info -->
+            <div class="footer-top">
+                <!-- Logo and About -->
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                    </div>
+                    <h3 class="footer-title">IEEE-13th International Conference on Orange Technology</h3>
+                    <p class="footer-description">
+                        A premier forum for researchers, engineers, and practitioners to present and discuss the latest research, innovations, and applications in the field of Orange Technology.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-links">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-nav">
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#speakers">Speakers</a></li>
+                        <li><a href="index.html#program">Program</a></li>
+                        <li><a href="index.html#dates">Important Dates</a></li>
+                        <li><a href="index.html#papers">Call for Papers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="footer-contact">
+                    <h3 class="footer-heading">Contact Us</h3>
+                    <ul class="contact-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Universitas Kristen Maranatha<br>Jl. Surya Sumantri No.65, Bandung,<br>West Java, Indonesia</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+628979400787">+62 897 9400 787</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="footer-divider"></div>
+
+            <!-- Footer Bottom with Copyright -->
+            <div class="footer-bottom">
+                <p>&copy; 2025 IEEE-13th International Conference on Orange Technology. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Supabase initialization -->
+    <script src="./js/supabase.js"></script>
+    
+    <!-- Speaker Detail JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize Supabase client
+            let supabase;
+            try {
+                supabase = await window.initSupabase();
+            } catch (error) {
+                console.error('Failed to initialize Supabase:', error);
+                showErrorMessage('Failed to connect to database. Please try refreshing the page.');
+                return;
+            }
+            
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const speakerType = urlParams.get('type'); // 'keynote' or 'invited'
+            const speakerId = urlParams.get('id');
+            
+            const speakerDetailsContainer = document.getElementById('speaker-details-container');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            
+            // If no specific speaker is requested, show all speakers
+            if (!speakerId || !speakerType) {
+                await loadAllSpeakers(supabase, speakerDetailsContainer, loadingIndicator);
+                return;
+            }
+            
+            // Load specific speaker details
+            try {
+                // Determine which table to query based on speaker type
+                const tableName = speakerType === 'keynote' ? 'speakers' : 'invited_speakers';
+                
+                // Fetch speaker data
+                const { data: speakerData, error } = await supabase
+                    .from(tableName)
+                    .select('*')
+                    .eq('id', speakerId)
+                    .single();
+                    
+                if (error) {
+                    console.error('Error fetching speaker data:', error);
+                    throw error;
+                }
+                
+                if (!speakerData) {
+                    console.error('Speaker not found');
+                    throw new Error('Speaker not found');
+                }
+                
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                
+                // Create speaker detail HTML
+                const speakerDetailHtml = createSpeakerDetailHtml(speakerData, speakerType);
+                
+                // Update content
+                speakerDetailsContainer.innerHTML = speakerDetailHtml;
+                
+            } catch (error) {
+                console.error('Error loading speaker details:', error);
+                showErrorMessage('Failed to load speaker details. Please try again later.');
+            }
+        });
+        
+        // Function to create HTML for a single speaker detail
+        function createSpeakerDetailHtml(speaker, speakerType) {
+            // Create a placeholder if no image is available
+            const imageHtml = speaker.image_url 
+                ? `<img src="${speaker.image_url}" alt="${speaker.name}">`
+                : `<div class="speaker-placeholder" style="background-color: #ffab00; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+                    <span style="color: white; font-size: 3rem; font-weight: bold;">${speaker.name.split(' ').pop()}</span>
+                   </div>`;
+            
+            // Format speaker type label
+            const speakerTypeLabel = speakerType === 'keynote' ? 'Keynote Speaker' : 'Invited Speaker';
+            
+            return `
+                <div class="speaker-detail">
+                    <div class="speaker-detail-header">
+                        <h2>${speakerTypeLabel}</h2>
+                        <div class="speaker-type-badge">${speakerType === 'keynote' ? 'Keynote' : 'Invited'}</div>
+                    </div>
+                    
+                    <div class="speaker-detail-profile">
+                        <div class="speaker-detail-image">
+                            ${imageHtml}
+                        </div>
+                        <div class="speaker-detail-info">
+                            <h3 class="speaker-detail-name">${speaker.name || 'TBA'}</h3>
+                            <p class="speaker-detail-position">${speaker.position || ''}</p>
+                            <p class="speaker-detail-affiliation">${speaker.affiliation || ''}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="speaker-detail-content">
+                        <div class="content-section">
+                            <h4 class="content-title">Biography</h4>
+                            <div class="content-text">
+                                ${formatContent(speaker.biography || 'Biography coming soon.')}
+                            </div>
+                        </div>
+                        
+                        <div class="content-section">
+                            <h4 class="content-title">Presentation</h4>
+                            <h5 class="presentation-title">${speaker.presentation_title || 'To Be Announced'}</h5>
+                            <div class="content-text">
+                                ${formatContent(speaker.presentation_abstract || 'Abstract coming soon.')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Function to load all speakers when no specific speaker is requested
+        async function loadAllSpeakers(supabase, container, loadingIndicator) {
+            try {
+                // Fetch keynote speakers
+                const { data: keynoteSpeakers, error: keynoteError } = await supabase
+                    .from('speakers')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+                    
+                if (keynoteError) {
+                    console.error('Error fetching keynote speakers:', keynoteError);
+                    throw keynoteError;
+                }
+                
+                // Fetch invited speakers
+                const { data: invitedSpeakers, error: invitedError } = await supabase
+                    .from('invited_speakers')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+                    
+                if (invitedError) {
+                    console.error('Error fetching invited speakers:', invitedError);
+                    throw invitedError;
+                }
+                
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                
+                // Create HTML for all speakers
+                let allSpeakersHtml = '';
+                
+                // Add keynote speakers
+                if (keynoteSpeakers && keynoteSpeakers.length > 0) {
+                    keynoteSpeakers.forEach(speaker => {
+                        allSpeakersHtml += createSpeakerDetailHtml(speaker, 'keynote');
+                    });
+                }
+                
+                // Add invited speakers
+                if (invitedSpeakers && invitedSpeakers.length > 0) {
+                    invitedSpeakers.forEach(speaker => {
+                        allSpeakersHtml += createSpeakerDetailHtml(speaker, 'invited');
+                    });
+                }
+                
+                // If no speakers found
+                if (allSpeakersHtml === '') {
+                    allSpeakersHtml = `
+                        <div class="tba-container">
+                            <div class="tba-box">
+                                <div class="tba-icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <h3 class="tba-title">Speakers To Be Announced</h3>
+                                <p class="tba-text">Our keynote and invited speakers will be announced soon. Please check back later.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Update content
+                container.innerHTML = allSpeakersHtml;
+                
+            } catch (error) {
+                console.error('Error loading all speakers:', error);
+                showErrorMessage('Failed to load speakers. Please try again later.');
+            }
+        }
+        
+        // Helper function to format content with paragraphs
+        function formatContent(content) {
+            if (!content) return '';
+            
+            // Replace double line breaks with paragraph tags
+            return content.split('\n\n')
+                .filter(paragraph => paragraph.trim() !== '')
+                .map(paragraph => `<p>${paragraph.trim()}</p>`)
+                .join('');
+        }
+        
+        // Function to show error message
+        function showErrorMessage(message) {
+            const container = document.getElementById('speaker-details-container');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            
+            // Hide loading indicator
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+            
+            // Show error message
+            container.innerHTML = `
+                <div class="error-container">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <p class="error-text">${message}</p>
+                </div>
+            `;
+        }
+        
+        // Mobile menu toggle functionality
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+            
+            const menuIcon = document.getElementById('menuIcon');
+            if (mobileMenu.classList.contains('active')) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            } else {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
+        });
+    </script>
+</body>
+</html>

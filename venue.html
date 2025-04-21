@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venue & Accommodation - IEEE-13th ICOT 2025</title>
+    
+    <!-- CSS with version parameter to prevent caching -->
+    <link rel="stylesheet" href="styles.css?v=1.0.1">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Meta tags to prevent caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <style>
+        /* Venue Page Specific Styles */
+        .venue-section {
+            padding: 4rem 0;
+            background: linear-gradient(to bottom, #fff, #f9fafb);
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        
+        .section-divider {
+            width: 6rem;
+            height: 0.25rem;
+            background-color: #f97316;
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        
+        /* Card Styling */
+        .venue-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: #f97316;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .venue-map {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-box {
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #f97316;
+            transition: all 0.3s ease;
+        }
+        
+        .info-box:hover {
+            background-color: #f3f4f6;
+            transform: translateX(5px);
+        }
+        
+        .info-box h3 {
+            color: #f97316;
+            font-size: 1.25rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-box p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-box ul {
+            padding-left: 1.5rem;
+            margin-bottom: 0;
+            color: #4b5563;
+        }
+        
+        .info-box li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .note-box {
+            background-color: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 1.25rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .note-box h4 {
+            color: #f97316;
+            font-size: 1.1rem;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .note-box p {
+            margin: 0;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+        
+        .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .hotel-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .hotel-image {
+            height: 180px;
+            position: relative;
+        }
+        
+        .hotel-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .hotel-rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(249, 115, 22, 0.9);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .hotel-info {
+            padding: 1.25rem;
+        }
+        
+        .hotel-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 0.75rem 0;
+            color: #1f2937;
+        }
+        
+        .hotel-address {
+            color: #4b5563;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            line-height: 1.4;
+        }
+        
+        .hotel-address i {
+            color: #f97316;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+        
+        .hotel-distance {
+            color: #4b5563;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .hotel-distance i {
+            color: #f97316;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+        
+        .hotel-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .hotel-feature {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .hotel-feature i {
+            color: #f97316;
+        }
+        
+        .hotel-button {
+            display: block;
+            text-align: center;
+            background-color: #f97316;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .hotel-button:hover {
+            background-color: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .transport-item {
+            margin-bottom: 1.25rem;
+        }
+        
+        .transport-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .transport-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        .transport-list {
+            padding-left: 1.5rem;
+            margin-bottom: 0;
+            color: #4b5563;
+        }
+        
+        .transport-list li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            margin: 0 2px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .mobile-nav-link {
+            color: white;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 12px 0;
+            width: 100%;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            color: #f97316;
+        }
+        
+        /* Responsive styles */
+        @media (min-width: 768px) {
+            .venue-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .venue-card,
+            .accommodation-card {
+                grid-column: span 2;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hotel-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="banner">
+        <div class="banner-container">
+            <span class="banner-text">IEEE-13th ICOT 2025 !!! Conference Date (October 27 ~ 29, 2025) !!!</span>
+            <a href="#speakers" class="banner-button">Keynote Speech</a>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="logo-container">
+                <div class="logo">
+                    <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                </div>
+                <span class="logo-text">ICOT 2025 IEEE-13th International Conference</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <button class="nav-link" data-section="home">Home</button>
+                <button class="nav-link" data-section="about">About</button>
+                <button class="nav-link" data-section="speakers">Speakers</button>
+                <button class="nav-link" data-section="program">Program</button>
+                <button class="nav-link" data-section="committee">Committee</button>
+                <button class="nav-link" data-section="dates">Dates</button>
+                <button class="nav-link" data-section="papers">Papers</button>
+                <button class="nav-link" data-section="submission">Submission</button>
+                <button class="nav-link" data-section="participant-info">Participant Info</button>
+            </nav>
+
+            <!-- Mobile menu button -->
+            <div class="mobile-menu-button">
+                <button id="menuToggle">
+                    <i class="fas fa-bars" id="menuIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-items">
+                <button class="mobile-nav-link" data-section="home">Home</button>
+                <button class="mobile-nav-link" data-section="about">About</button>
+                <button class="mobile-nav-link" data-section="speakers">Speakers</button>
+                <button class="mobile-nav-link" data-section="program">Program</button>
+                <button class="mobile-nav-link" data-section="committee">Committee</button>
+                <button class="mobile-nav-link" data-section="dates">Dates</button>
+                <button class="mobile-nav-link" data-section="papers">Papers</button>
+                <button class="mobile-nav-link" data-section="submission">Submission</button>
+                <button class="mobile-nav-link" data-section="participant-info">Participant Info</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="main-content">
+        <section id="venue" class="venue-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2 class="section-title">Venue & Accommodation</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <!-- Venue Cards -->
+                <div class="venue-cards">
+                    <!-- Conference Venue -->
+                    <div class="card venue-card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-map-marker-alt"></i> Conference Venue</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-box">
+                                <h3><i class="fas fa-university"></i> Universitas Kristen Maranatha</h3>
+                                <p>The IEEE-13th International Conference on Orange Technology (ICOT 2025) will be held at:</p>
+                                <p><strong>Address:</strong> Universitas Kristen Maranatha, Jl. Prof. drg. Surya Sumantri No.65, Sukawarna, Kec. Sukajadi, Kota Bandung, Jawa Barat 40164, Indonesia</p>
+                                
+                                <!-- Embed Google Maps -->
+                                <iframe class="venue-map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.1135845614374!2d107.57324731477269!3d-6.886386095025384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6873a8cf5a7%3A0x4e428c8a3478df11!2sMaranatha%20Christian%20University!5e0!3m2!1sen!2sid!4v1644297747015!5m2!1sen!2sid" allowfullscreen="" loading="lazy"></iframe>
+                            </div>
+                            
+                            <div class="info-box">
+                                <h3><i class="fas fa-info-circle"></i> About Universitas Kristen Maranatha</h3>
+                                <p>Universitas Kristen Maranatha is one of Indonesia's premier private Christian universities, located in the heart of Bandung city. Founded in 1965, the university has established itself as a leading institution for higher education in Indonesia, consistently delivering excellence in academic programs and research.</p>
+                                <p>The university's modern facilities and strategic location make it an ideal venue for international conferences. With state-of-the-art conference halls, advanced technological infrastructure, and a beautiful campus environment, Maranatha provides the perfect setting for academic discourse and professional networking.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Getting to the Venue -->
+                    <div class="card directions-card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-directions"></i> Getting to the Venue</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-box">
+                                <h3><i class="fas fa-route"></i> Directions to Maranatha</h3>
+                                <p>Universitas Kristen Maranatha is centrally located in Bandung and easily accessible through various transportation options:</p>
+                                
+                                <div class="transport-item">
+                                    <div class="transport-title">From Husein Sastranegara International Airport:</div>
+                                    <p>The university is approximately 6 km from the airport. Take a taxi (about 20-30 minutes depending on traffic) or book a ride-hailing service like Grab or Gojek.</p>
+                                </div>
+
+                                <div class="transport-item">
+                                    <div class="transport-title">From Bandung Railway Station:</div>
+                                    <p>The campus is about 4 km from Bandung's main railway station. You can take a taxi, or use ride-hailing services (approximately 15-20 minutes).</p>
+                                </div>
+
+                                <div class="transport-item">
+                                    <div class="transport-title">From Jakarta via High-Speed Rail (WHOOSH):</div>
+                                    <p>Take the WHOOSH high-speed train from Halim Station (Jakarta) to Tegalluar Station (Bandung). From Tegalluar Station to Maranatha, take a taxi or ride-hailing service (approximately 30-40 minutes depending on traffic).</p>
+                                </div>
+                                
+                                <div class="transport-item">
+                                    <div class="transport-title">Local Transportation:</div>
+                                    <ul class="transport-list">
+                                        <li>Taxis: Blue Bird Group, Grab Car</li>
+                                        <li>Motorcycle taxis: Grab Bike, Gojek</li>
+                                        <li>Public transportation: Angkot (public minivan) routes passing near the campus</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accommodation -->
+                    <div class="card accommodation-card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-hotel"></i> Recommended Accommodation</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="note-box">
+                                <h4><i class="fas fa-info-circle"></i> Special Rates for Conference Participants</h4>
+                                <p>We have negotiated special rates with the following hotels for ICOT 2025 participants. When making your reservation, please mention "ICOT 2025" to receive the conference discount.</p>
+                            </div>
+                            
+                            <div class="hotel-grid">
+                                <!-- Hotel 1 -->
+                                <div class="hotel-card">
+                                    <div class="hotel-image">
+                                        <img src="./assets/hotels/grand-mercure.jpg" alt="Grand Mercure Bandung Setiabudi">
+                                        <div class="hotel-rating">5-star</div>
+                                    </div>
+                                    <div class="hotel-info">
+                                        <h3 class="hotel-name">Grand Mercure Bandung Setiabudi</h3>
+                                        <div class="hotel-address">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Jl. Dr. Setiabudi No.269, Bandung</span>
+                                        </div>
+                                        <div class="hotel-distance">
+                                            <i class="fas fa-walking"></i>
+                                            <span>3.5 km from venue (15 min by car)</span>
+                                        </div>
+                                        <div class="hotel-features">
+                                            <span class="hotel-feature"><i class="fas fa-wifi"></i> Free WiFi</span>
+                                            <span class="hotel-feature"><i class="fas fa-swimming-pool"></i> Pool</span>
+                                            <span class="hotel-feature"><i class="fas fa-utensils"></i> Restaurant</span>
+                                            <span class="hotel-feature"><i class="fas fa-dumbbell"></i> Gym</span>
+                                        </div>
+                                        <a href="#" class="hotel-button">Book Now</a>
+                                    </div>
+                                </div>
+                                
+                                <!-- Hotel 2 -->
+                                <div class="hotel-card">
+                                    <div class="hotel-image">
+                                        <img src="./assets/hotels/harris.jpg" alt="Harris Hotel & Conventions Ciumbuleuit">
+                                        <div class="hotel-rating">4-star</div>
+                                    </div>
+                                    <div class="hotel-info">
+                                        <h3 class="hotel-name">Harris Hotel & Conventions</h3>
+                                        <div class="hotel-address">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Jl. Ciumbuleuit No.50-58, Bandung</span>
+                                        </div>
+                                        <div class="hotel-distance">
+                                            <i class="fas fa-walking"></i>
+                                            <span>2.5 km from venue (10 min by car)</span>
+                                        </div>
+                                        <div class="hotel-features">
+                                            <span class="hotel-feature"><i class="fas fa-wifi"></i> Free WiFi</span>
+                                            <span class="hotel-feature"><i class="fas fa-swimming-pool"></i> Pool</span>
+                                            <span class="hotel-feature"><i class="fas fa-utensils"></i> Restaurant</span>
+                                            <span class="hotel-feature"><i class="fas fa-car"></i> Parking</span>
+                                        </div>
+                                        <a href="#" class="hotel-button">Book Now</a>
+                                    </div>
+                                </div>
+                                
+                                <!-- Hotel 3 -->
+                                <div class="hotel-card">
+                                    <div class="hotel-image">
+                                        <img src="./assets/hotels/hilton.jpg" alt="Hilton Bandung">
+                                        <div class="hotel-rating">5-star</div>
+                                    </div>
+                                    <div class="hotel-info">
+                                        <h3 class="hotel-name">Hilton Bandung</h3>
+                                        <div class="hotel-address">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Jl. HOS Tjokroaminoto No.41-43, Bandung</span>
+                                        </div>
+                                        <div class="hotel-distance">
+                                            <i class="fas fa-walking"></i>
+                                            <span>4 km from venue (20 min by car)</span>
+                                        </div>
+                                        <div class="hotel-features">
+                                            <span class="hotel-feature"><i class="fas fa-wifi"></i> Free WiFi</span>
+                                            <span class="hotel-feature"><i class="fas fa-swimming-pool"></i> Pool</span>
+                                            <span class="hotel-feature"><i class="fas fa-spa"></i> Spa</span>
+                                            <span class="hotel-feature"><i class="fas fa-dumbbell"></i> Gym</span>
+                                        </div>
+                                        <a href="#" class="hotel-button">Book Now</a>
+                                    </div>
+                                </div>
+                                
+                                <!-- Hotel 4 -->
+                                <div class="hotel-card">
+                                    <div class="hotel-image">
+                                        <img src="./assets/hotels/papandayan.jpg" alt="The Papandayan">
+                                        <div class="hotel-rating">4-star</div>
+                                    </div>
+                                    <div class="hotel-info">
+                                        <h3 class="hotel-name">The Papandayan</h3>
+                                        <div class="hotel-address">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Jl. Gatot Subroto No.83, Bandung</span>
+                                        </div>
+                                        <div class="hotel-distance">
+                                            <i class="fas fa-walking"></i>
+                                            <span>3.8 km from venue (15 min by car)</span>
+                                        </div>
+                                        <div class="hotel-features">
+                                            <span class="hotel-feature"><i class="fas fa-wifi"></i> Free WiFi</span>
+                                            <span class="hotel-feature"><i class="fas fa-swimming-pool"></i> Pool</span>
+                                            <span class="hotel-feature"><i class="fas fa-utensils"></i> Restaurant</span>
+                                            <span class="hotel-feature"><i class="fas fa-spa"></i> Spa</span>
+                                        </div>
+                                        <a href="#" class="hotel-button">Book Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-box">
+                                <h3><i class="fas fa-concierge-bell"></i> Alternative Accommodation Options</h3>
+                                <p>In addition to our recommended hotels, Bandung offers a wide range of accommodation options to suit all budgets:</p>
+                                <ul>
+                                    <li><strong>Budget Hotels:</strong> Favehotel, Ibis Budget, Zest Hotel</li>
+                                    <li><strong>Mid-range Hotels:</strong> Holiday Inn, Aston, Novotel</li>
+                                    <li><strong>Boutique Hotels:</strong> Padma Hotel, Artotel, Amaroossa Hotel</li>
+                                    <li><strong>Serviced Apartments:</strong> Golden Flower Apartment, H Residences</li>
+                                </ul>
+                                <p>Online booking platforms like Booking.com, Agoda, and Traveloka offer competitive rates for accommodation in Bandung.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                    </div>
+                    <h3 class="footer-title">IEEE-13th International Conference on Orange Technology</h3>
+                    <p class="footer-description">
+                        A premier forum for researchers, engineers, and practitioners to present and discuss the latest research, innovations, and applications in the field of Orange Technology.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-nav">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#speakers">Speakers</a></li>
+                        <li><a href="index.html#program">Program</a></li>
+                        <li><a href="index.html#dates">Important Dates</a></li>
+                        <li><a href="index.html#papers">Call for Papers</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h3 class="footer-heading">Contact Us</h3>
+                    <ul class="contact-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Universitas Kristen Maranatha<br>Jl. Surya Sumantri No.65, Bandung,<br>West Java, Indonesia</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+628979400787">+62 897 9400 787</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 IEEE-13th International Conference on Orange Technology. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Supabase initialization -->
+    <script src="./js/supabase.js"></script>
+    
+    <!-- Main JavaScript -->
+    <script src="./js/script.js"></script>
+    
+    <!-- Section Loader Script -->
+    <script src="./js/section-loader.js"></script>
+    
+    <!-- JavaScript for mobile menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('active');
+                    if (mobileMenu.classList.contains('active')) {
+                        menuIcon.classList.remove('fa-bars');
+                        menuIcon.classList.add('fa-times');
+                    } else {
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            // Handle navigation buttons like in the original index page
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    
+                    // If section is home, just go to index
+                    if (section === 'home') {
+                        window.location.href = 'index.html';
+                    } else {
+                        window.location.href = 'index.html#' + section;
+                    }
+                    
+                    // Close mobile menu if open
+                    if (mobileMenu && mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                        if (menuIcon) {
+                            menuIcon.classList.remove('fa-times');
+                            menuIcon.classList.add('fa-bars');
+                        }
+                    }
+                });
+            });
+            
+            // Highlight 'participant-info' in the navigation since this page is part of participant info
+            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                if (link.getAttribute('data-section') === 'participant-info') {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

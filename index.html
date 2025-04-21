@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IEEE-13th ICOT 2025</title>
-    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Tambahkan parameter versi pada link CSS untuk mencegah caching -->
+    <link rel="stylesheet" href="styles.css?v=1.0.1">
+    
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tambahkan meta tags untuk mencegah caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 </head>
 <body>
     <!-- Top Banner - Always visible -->
     <div class="banner">
         <div class="banner-container">
             <span class="banner-text">IEEE-13th ICOT 2025 !!! Conference Date (October 27 ~ 29, 2025) !!!</span>
-            <button class="banner-button">Keynote Speech</button>
+            <a href="#speakers" class="banner-button">Keynote Speech</a>
         </div>
     </div>
 
@@ -37,7 +45,8 @@
                 <button class="nav-link" data-section="dates">Dates</button>
                 <button class="nav-link" data-section="papers">Papers</button>
                 <button class="nav-link" data-section="submission">Submission</button>
-                <button class="nav-link" data-section="registration">Registration</button>
+                <button class="nav-link" data-section="participant-info">Participant Info</button>
+                <!-- <button class="nav-link" data-section="registration">Registration</button> -->
             </nav>
 
             <!-- Mobile menu button -->
@@ -59,7 +68,8 @@
                 <button class="mobile-nav-link" data-section="dates">Dates</button>
                 <button class="mobile-nav-link" data-section="papers">Papers</button>
                 <button class="mobile-nav-link" data-section="submission">Submission</button>
-                <button class="mobile-nav-link" data-section="registration">Registration</button>
+                <button class="mobile-nav-link" data-section="participant-info">Participant Info</button>
+                <!-- <button class="mobile-nav-link" data-section="registration">Registration</button> -->
             </div>
         </div>
     </header>
@@ -73,7 +83,7 @@
                 <h1 class="hero-title">2025 IEEE-13th International Conference on Orange Technology</h1>
                 <p class="hero-subtitle">(IEEE ICOT-2025)</p>
                 <p class="hero-date">October 27 ~ 29, 2025</p>
-                <p class="hero-location">Maranatha Christian University, Bandung, Indonesia</p>
+                <p class="hero-location">Universitas Kristen Maranatha, Bandung, Indonesia</p>
             </div>
         </section>
 
@@ -92,7 +102,7 @@
           
           <p>International Conference on Orange Technologies (ICOT) was previously held in Cheng Kung University (ICOT 2013), Northwestern Polytechnical University (ICOT 2014), Hong Kong Polytechnic University (ICOT 2015), Victoria University (ICOT 2016), National University of Singapore (ICOT 2017), IDEAS LAB (ICOT 2018), Changzhou College of Information Technology (ICOT 2019), Kyungpook National University (ICOT 2020), Cheng Kung University (ICOT 2021), Cheng Kung University (ICOT 2022), Kyungpook National University (ICOT 2023) and National Cheng Kung University (ICOT 2024). All conference Proceedings could be found on <a href="https://ieeexplore.ieee.org/xpl/conhome/1804324/all-proceedings" target="_blank" class="conference-link">IEEE Xplore</a>.</p>
           
-          <p>The research scope includes computer science, electrical engineering, biomedical engineering, psychological/physiological science, cognitive science, social science, and technology (design + technology). The 13th International Conference on Orange Technology (ICOT 2025) will be held in Maranatha Christian University, Bandung. ICOT 2025 will provide an interactive forum for researchers, emineers and vendors from different disciplines to exchange ideas and experiences, identify future directions and challenges, as well as promote developments and applications of orange technology. This conference will significantly benefit a large variety of audiences from both academic and industry. You are cordially invited and most welcome to participate in ICOT 2025.</p>
+          <p>The research scope includes computer science, electrical engineering, biomedical engineering, psychological/physiological science, cognitive science, social science, and technology (design + technology). The 13th International Conference on Orange Technology (ICOT 2025) will be held in Universitas Kristen Maranatha, Bandung. ICOT 2025 will provide an interactive forum for researchers, emineers and vendors from different disciplines to exchange ideas and experiences, identify future directions and challenges, as well as promote developments and applications of orange technology. This conference will significantly benefit a large variety of audiences from both academic and industry. You are cordially invited and most welcome to participate in ICOT 2025.</p>
           
           <div class="co-located-conference">
             <p>
@@ -119,7 +129,7 @@
             <h3 class="organizers-subtitle">Organized by</h3>
             <div class="organizers-logos">
                 <div class="organizer-logo">
-                    <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                    <img src="./assets/ideaslab.png" alt="ICOT Logo">
                 </div>
                 <div class="organizer-logo">
                     <img src="./assets/cologo6.png" alt="Universitas Kristen Maranatha Logo">
@@ -131,6 +141,9 @@
         <div class="organizers-container">
             <h3 class="organizers-subtitle">Co-organized by</h3>
             <div class="co-organizers-logos">
+                <div class="organizer-logo">
+                    <img src="./assets/cologo7.jpeg" alt="Co-organizer Logo 5">
+                </div>
                 <div class="organizer-logo">
                     <img src="./assets/cologo1.png" alt="Co-organizer Logo 1">
                 </div>
@@ -146,6 +159,7 @@
                 <div class="organizer-logo">
                     <img src="./assets/cologo5.jpg" alt="Co-organizer Logo 5">
                 </div>
+                
             </div>
         </div>
 
@@ -154,10 +168,13 @@
             <h3 class="organizers-subtitle">Technical Support</h3>
             <div class="tech-support-logos">
                 <div class="organizer-logo">
-                    <img src="./assets/teclogo1.png" alt="Technical Support Logo 1">
+                    <img src="./assets/teclogo1.png" alt="Technical Support Logo 2">
                 </div>
                 <div class="organizer-logo">
-                    <img src="./assets/teclogo2.png" alt="Technical Support Logo 2">
+                    <img src="./assets/teclogo2.jpg" alt="Technical Support Logo 3">
+                </div>
+                <div class="organizer-logo">
+                    <img src="./assets/teclogo3.png" alt="Technical Support Logo 4">
                 </div>
         </div>
     </div>
@@ -202,7 +219,7 @@
                 <ul class="contact-list">
                     <li>
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>Maranatha Christian University<br>Jl. Surya Sumantri No.65, Bandung,<br>West Java, Indonesia</span>
+                        <span>Universitas Kristen Maranatha<br>Jl. Surya Sumantri No.65, Bandung,<br>West Java, Indonesia</span>
                     </li>
                     <li>
                         <i class="fas fa-envelope"></i>
