@@ -1,21 +1,15 @@
-// section-loader.js - Handles loading all dynamic sections for ICOT 2025 website
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Section loader initialized');
-    
-    // We will not auto-load sections here - wait for Supabase to be ready
-    // The loading will be triggered from script.js after Supabase is initialized
 });
 
-// Make loadAllSections available globally
+// Make loadAllSections
 window.loadAllSections = loadAllSections;
 
-// Main function to load all sections
 async function loadAllSections() {
     console.log('Starting to load all sections');
     let supabase;
     
     try {
-        // Use the already initialized Supabase client
         if (window.supabase) {
             supabase = window.supabase;
             console.log('Using existing Supabase client in section-loader');
@@ -35,22 +29,17 @@ async function loadAllSections() {
         handleStaticSections();
         return;
     }
-    
-    // Get hero section as reference
     const heroSection = document.getElementById('home');
     if (!heroSection) {
         console.error('Hero section not found');
         return;
     }
-    
-    // Get about section as reference (should be static HTML)
+
     const aboutSection = document.getElementById('about');
-    
-    // Define the reference section (where to start adding new sections)
+
     let prevSection = aboutSection || heroSection;
-    
-    // Define sections in the order they should appear
     const sections = [
+        { id: 'tourist-attractions', title: 'Tourist Attractions', load: loadTouristAttractionsSection },
         { id: 'speakers', title: 'Keynote Speakers', load: loadSpeakersSection },
         { id: 'invited-speakers', title: 'Invited Speakers', load: loadInvitedSpeakersSection },
         { id: 'committee', title: 'Organizing Committee', load: loadCommitteeSection },
@@ -62,21 +51,15 @@ async function loadAllSections() {
         { id: 'registration', title: 'Registration', load: loadSimpleTbaSection }
     ];
     
-    // Load each section in sequence
     for (const section of sections) {
-        // Skip if section already exists
         const existingSection = document.getElementById(section.id);
         if (existingSection) {
             console.log(`Section ${section.id} already exists, replacing content`);
-            
-            // For existing sections, update their content
             try {
                 await section.load(supabase, existingSection, true);
                 prevSection = existingSection;
             } catch (error) {
                 console.error(`Error updating existing section ${section.id}:`, error);
-                
-                // Reset to TBA state if error occurs
                 const contentContainer = existingSection.querySelector(`.${section.id}-content`);
                 if (contentContainer) {
                     contentContainer.innerHTML = createTbaHTML(section.id, section.title);
@@ -85,13 +68,10 @@ async function loadAllSections() {
             
             continue;
         }
-        
-        // Create and load new section
+        n
         try {
             console.log(`Loading new section: ${section.id}`);
             await section.load(supabase, prevSection);
-            
-            // Update reference for next section
             const newSection = document.getElementById(section.id);
             if (newSection) {
                 prevSection = newSection;
@@ -106,8 +86,6 @@ async function loadAllSections() {
     
     console.log('All sections loaded or updated');
 }
-
-// Handle static sections if Supabase fails
 function handleStaticSections() {
     const staticSections = ['committee', 'program', 'dates', 'papers', 'submission', 'registration'];
     
@@ -122,7 +100,6 @@ function handleStaticSections() {
     });
 }
 
-// Helper function to insert a section after another section
 function insertAfter(newNode, referenceNode) {
     if (!referenceNode) {
         console.error('Reference node is null or undefined');
@@ -136,9 +113,6 @@ function insertAfter(newNode, referenceNode) {
     }
 }
 
-/**
- * Load Invited Speakers Section data from Supabase
- */
 async function loadInvitedSpeakersSection(supabase, prevSection, isExisting = false) {
     const sectionId = 'invited-speakers';
     
@@ -147,7 +121,6 @@ async function loadInvitedSpeakersSection(supabase, prevSection, isExisting = fa
         let contentContainer;
         
         if (isExisting) {
-            // Use existing section
             section = prevSection;
             contentContainer = section.querySelector('.invited-speakers-content');
             
@@ -158,7 +131,6 @@ async function loadInvitedSpeakersSection(supabase, prevSection, isExisting = fa
                 return;
             }
         } else {
-            // Create invited speakers section element
             section = document.createElement('section');
             section.id = sectionId;
             section.className = 'invited-speakers-section';
@@ -1156,13 +1128,6 @@ function createErrorHTML() {
         </div>
     `;
 }
-
-/**
- * Load Call For Papers Section from Supabase
- */
-/**
- * Load Call For Papers Section from Supabase
- */
 async function loadPapersSection(supabase, prevSection, isExisting = false) {
     const sectionId = 'papers';
     
@@ -1941,3 +1906,412 @@ const sections = [
     { id: 'registration', title: 'Registration', load: loadSimpleTbaSection }
 ];
 */
+
+/**
+ * Load Tourist Attractions Section data from Supabase
+ */
+async function loadTouristAttractionsSection(supabase, prevSection, isExisting = false) {
+    const sectionId = 'tourist-attractions';
+    
+    try {
+        let section;
+        let contentElement;
+        
+        if (isExisting) {
+            // Use existing section
+            section = prevSection;
+            contentElement = section.querySelector('.tourist-attractions-content');
+            
+            if (contentElement) {
+                contentElement.innerHTML = createLoadingHTML();
+            } else {
+                console.error('No content container found in existing tourist attractions section');
+                return;
+            }
+        } else {
+            // Create new section element
+            section = document.createElement('section');
+            section.id = sectionId;
+            section.className = 'tourist-attractions-section';
+            section.innerHTML = `
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Tourist Attractions</h2>
+                        <div class="section-divider"></div>
+                    </div>
+                    <div class="tourist-attractions-content">
+                        ${createLoadingHTML()}
+                    </div>
+                </div>
+            `;
+            
+            // Insert after previous section
+            insertAfter(section, prevSection);
+            contentElement = section.querySelector('.tourist-attractions-content');
+        }
+        
+        try {
+            // Fetch attractions from Supabase
+            const { data: attractions, error } = await supabase
+                .from('tourist_attractions')
+                .select('*')
+                .order('created_at', { ascending: true });
+                
+            if (error) {
+                console.error('Error fetching tourist attractions:', error);
+                throw error;
+            }
+            
+            if (!attractions || attractions.length === 0) {
+                console.log('No tourist attractions found, loading from static data');
+                // Fall back to static data if no attractions in database
+                const staticAttractions = await loadStaticAttractions();
+                renderAttractions(staticAttractions, contentElement);
+                return;
+            }
+            
+            console.log(`Found ${attractions.length} tourist attractions, rendering them`);
+            renderAttractions(attractions, contentElement);
+            
+        } catch (error) {
+            console.error('Error in Supabase query for tourist attractions:', error);
+            // Fall back to static data
+            const staticAttractions = await loadStaticAttractions();
+            renderAttractions(staticAttractions, contentElement);
+        }
+        
+    } catch (error) {
+        console.error(`Error loading ${sectionId} section:`, error);
+        window.showNotification(`Failed to load ${sectionId} section. Please try again later.`, 'error');
+        
+        // Set error state in the section
+        const section = document.getElementById(sectionId);
+        if (section) {
+            const contentElement = section.querySelector('.tourist-attractions-content');
+            if (contentElement) {
+                contentElement.innerHTML = createErrorHTML();
+            }
+        }
+    }
+}
+
+/**
+ * Render attractions data to HTML
+ */
+function renderAttractions(attractions, contentElement) {
+    // Filter attractions by category to group them
+    const categories = [...new Set(attractions.map(attraction => {
+        const mainCategory = attraction.category.split(',')[0].trim();
+        return mainCategory;
+    }))];
+    
+    let attractionsHtml = `
+        <div class="attractions-container">
+            <div class="attractions-intro">
+                <p>Bandung, known as the "Paris of Java," offers a variety of attractions for conference attendees to explore. Here are some recommended places to visit during your stay for ICOT 2025:</p>
+            </div>
+            
+            <div class="category-filter">
+                <button class="filter-button active" data-category="all">All</button>
+                ${categories.map(category => `
+                    <button class="filter-button" data-category="${category.toLowerCase().replace(/\s+/g, '-')}">${category}</button>
+                `).join('')}
+            </div>
+            
+            <div class="attractions-grid">
+    `;
+    
+    // Add each attraction
+    attractions.forEach(attraction => {
+        const mainCategory = attraction.category.split(',')[0].trim();
+        const categoryClass = mainCategory.toLowerCase().replace(/\s+/g, '-');
+        
+        attractionsHtml += `
+            <div class="attraction-card" data-category="${categoryClass}">
+                <div class="attraction-image">
+                    <img src="${attraction.image_url || 'https://placehold.co/600x400/f97316/white?text=Attraction'}" alt="${attraction.name}">
+                </div>
+                <div class="attraction-content">
+                    <h3 class="attraction-name">${attraction.name}</h3>
+                    <span class="attraction-category">${attraction.category}</span>
+                    <p class="attraction-description">${attraction.description}</p>
+                    <div class="attraction-details">
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${attraction.address}</span>
+                        </div>
+                        ${attraction.website ? `
+                        <div class="detail-item">
+                            <i class="fas fa-globe"></i>
+                            <a href="${attraction.website}" target="_blank">Visit Website</a>
+                        </div>
+                        ` : ''}
+                        <div class="detail-item">
+                            <i class="fas fa-map"></i>
+                            <a href="${attraction.google_maps}" target="_blank">View on Google Maps</a>
+                        </div>
+                        <div class="detail-item price-info">
+                            <i class="fas fa-ticket-alt"></i>
+                            <div class="price-details">
+                                <span>Domestic: ${attraction.domestic_price}</span>
+                                <span>International: ${attraction.international_price}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    attractionsHtml += `
+            </div>
+        </div>
+    `;
+    
+    // Update content
+    contentElement.innerHTML = attractionsHtml;
+    
+    // Add event listeners for filtering
+    setTimeout(() => {
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const attractionCards = document.querySelectorAll('.attraction-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.dataset.category;
+                
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter cards
+                attractionCards.forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }, 100);
+    
+    // Add CSS for tourist attractions
+    addTouristAttractionCSS();
+}
+
+/**
+ * Add CSS for tourist attractions section
+ */
+function addTouristAttractionCSS() {
+    const styleId = 'tourist-attractions-styles';
+    
+    // Check if styles already exist
+    if (document.getElementById(styleId)) {
+        return;
+    }
+    
+    // Create style element
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+        .tourist-attractions-section {
+            background: linear-gradient(to bottom, #fff, #fff7ed, #fff);
+            padding: 4rem 0;
+        }
+        
+        .attractions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        .attractions-intro {
+            margin-bottom: 1rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .attractions-intro p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-button {
+            padding: 0.6rem 1.2rem;
+            background-color: #f5f5f5;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            color: #555;
+        }
+        
+        .filter-button:hover {
+            background-color: #f97316;
+            color: white;
+        }
+        
+        .filter-button.active {
+            background-color: #f97316;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .attractions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .attraction-card {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .attraction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .attraction-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .attraction-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .attraction-card:hover .attraction-image img {
+            transform: scale(1.1);
+        }
+        
+        .attraction-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .attraction-name {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .attraction-category {
+            display: inline-block;
+            font-size: 0.8rem;
+            background-color: #fff7ed;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            color: #f97316;
+            font-weight: 500;
+        }
+        
+        .attraction-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #555;
+            margin-bottom: 1.2rem;
+        }
+        
+        .attraction-details {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .detail-item i {
+            color: #f97316;
+            margin-right: 0.5rem;
+            margin-top: 0.2rem;
+            min-width: 16px;
+        }
+        
+        .detail-item a {
+            color: #f97316;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .detail-item a:hover {
+            color: #ea580c;
+            text-decoration: underline;
+        }
+        
+        .price-info {
+            border-top: 1px dashed #eee;
+            padding-top: 0.7rem;
+            margin-top: 0.3rem;
+        }
+        
+        .price-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (max-width: 768px) {
+            .attractions-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .attraction-image {
+                height: 180px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .filter-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+            
+            .attraction-content {
+                padding: 1.2rem;
+            }
+            
+            .attraction-name {
+                font-size: 1.1rem;
+            }
+            
+            .attractions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    `;
+    
+    // Add style to document head
+    document.head.appendChild(style);
+}
