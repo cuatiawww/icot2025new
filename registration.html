@@ -3,21 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration - IEEE-13th ICOT 2025</title>
+    <title>Registration - The 13th ICOT 2025</title>
     
-    <!-- CSS with version parameter to prevent caching -->
     <link rel="stylesheet" href="styles.css?v=1.0.1">
-    
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Meta tags to prevent caching -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
     <style>
-        /* Registration Section Styling */
         .registration-section {
             padding: 4rem 0;
             background: linear-gradient(to bottom, #fff, #f9fafb);
@@ -49,7 +44,6 @@
             border-radius: 9999px;
         }
         
-        /* Card Styling */
         .registration-cards {
             display: grid;
             grid-template-columns: 1fr;
@@ -197,92 +191,6 @@
             font-size: 1.1rem;
         }
 
-        .payment-methods-container {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .payment-method {
-            background-color: #f9fafb;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            border-left: 4px solid #f97316;
-            transition: all 0.3s ease;
-        }
-        
-        .payment-method:hover {
-            background-color: #f3f4f6;
-            transform: translateX(5px);
-        }
-        
-        .payment-method h4 {
-            color: #f97316;
-            font-size: 1.15rem;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .payment-details {
-            background-color: #f3f4f6;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .payment-details p {
-            margin: 0.5rem 0;
-            color: #4b5563;
-        }
-        
-        .payment-icons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .payment-icons img {
-            height: 40px;
-            border-radius: 0.25rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .qr-code {
-            text-align: center;
-            margin: 1.25rem 0;
-        }
-        
-        .qr-code img {
-            max-width: 180px;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .orange-button {
-            display: inline-flex;
-            align-items: center;
-            background-color: #f97316;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            margin-top: 1rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .orange-button:hover {
-            background-color: #ea580c;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
         .process-steps {
             padding-left: 1.5rem;
             margin: 0;
@@ -347,24 +255,44 @@
             color: #ea580c;
             text-decoration: underline;
         }
+
+        .clickable-logo {
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .clickable-logo:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+        .logo-text {
+            color: #fff!important;
+        }
+
+        .clickable-logo .logo-text {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .nav-link.active-page,
+        .mobile-nav-link.active-page {
+            color: #f97316 !important;
+            background-color: rgba(249, 115, 22, 0.15);
+            font-weight: 600;
+            cursor: default;
+            border-radius: 6px;
+        }
         
-        /* Responsive styles */
         @media (min-width: 768px) {
             .registration-cards {
                 grid-template-columns: repeat(2, 1fr);
             }
             
             .registration-fees-card,
-            .payment-card,
             .includes-card,
             .process-card {
                 grid-column: span 2;
-            }
-        }
-        
-        @media (min-width: 1024px) {
-            .payment-methods-container {
-                grid-template-columns: repeat(3, 1fr);
             }
         }
         
@@ -375,35 +303,27 @@
                 overflow-x: auto;
                 white-space: nowrap;
             }
-            
-            .payment-methods-container {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Top Banner -->
     <div class="banner">
         <div class="banner-container">
-            <span class="banner-text">IEEE-13th ICOT 2025 !!! Conference Date (October 27 ~ 29, 2025) !!!</span>
+            <span class="banner-text">The 13th ICOT 2025 !!! Conference Date (December 1 ~ 3, 2025) !!!</span>
             <a href="#speakers" class="banner-button">Keynote Speech</a>
         </div>
     </div>
 
-    <!-- Navbar -->
     <header class="navbar" id="navbar">
         <div class="navbar-container">
-            <a href="index.html" class="logo-container">
+            <a href="index.html" class="logo-container clickable-logo">
                 <div class="logo">
                     <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
                 </div>
-                <span class="logo-text">ICOT 2025 IEEE-13th International Conference</span>
+                <span class="logo-text">ICOT 2025</span>
             </a>
 
-            <!-- Desktop Navigation -->
             <nav class="desktop-nav">
-                <button class="nav-link" data-section="home">Home</button>
                 <button class="nav-link" data-section="about">About</button>
                 <button class="nav-link" data-section="speakers">Speakers</button>
                 <button class="nav-link" data-section="program">Program</button>
@@ -412,9 +332,9 @@
                 <button class="nav-link" data-section="papers">Papers</button>
                 <button class="nav-link" data-section="submission">Submission</button>
                 <button class="nav-link" data-section="participant-info">Participant Info</button>
+                <button class="nav-link active-page">Registration</button>
             </nav>
 
-            <!-- Mobile menu button -->
             <div class="mobile-menu-button">
                 <button id="menuToggle">
                     <i class="fas fa-bars" id="menuIcon"></i>
@@ -422,10 +342,8 @@
             </div>
         </div>
 
-        <!-- Mobile menu -->
         <div class="mobile-menu" id="mobileMenu">
             <div class="mobile-menu-items">
-                <button class="mobile-nav-link" data-section="home">Home</button>
                 <button class="mobile-nav-link" data-section="about">About</button>
                 <button class="mobile-nav-link" data-section="speakers">Speakers</button>
                 <button class="mobile-nav-link" data-section="program">Program</button>
@@ -434,11 +352,11 @@
                 <button class="mobile-nav-link" data-section="papers">Papers</button>
                 <button class="mobile-nav-link" data-section="submission">Submission</button>
                 <button class="mobile-nav-link" data-section="participant-info">Participant Info</button>
+                <button class="mobile-nav-link active-page">Registration</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
     <main id="main-content">
         <section id="registration" class="registration-section">
             <div class="section-container">
@@ -447,9 +365,7 @@
                     <div class="section-divider"></div>
                 </div>
 
-                <!-- Registration Fee Cards -->
                 <div class="registration-cards">
-                    <!-- Registration Fees -->
                     <div class="card registration-fees-card">
                         <div class="card-header">
                             <h3 class="card-title"><i class="fas fa-money-bill-wave"></i> Registration Fees</h3>
@@ -497,19 +413,18 @@
                             <div class="important-notes">
                                 <h4><i class="fas fa-info-circle"></i> Important Notes</h4>
                                 <ul>
-                                    <li>Early bird registration deadline: <strong>September 30, 2025</strong></li>
-                                    <li>Regular registration deadline: <strong>October 15, 2025</strong></li>
+                                    <li>Early bird registration deadline: <strong>November 10, 2025</strong></li>
+                                    <li>Regular registration deadline: <strong>November 28, 2025</strong></li>
                                     <li>At least one author must register for each accepted paper to be included in the proceedings</li>
                                     <li>Registration fee includes access to all sessions, conference materials, coffee breaks, and lunch during conference days</li>
-                                    <li>Onsite registration includes the welcome reception and conference dinner</li>
                                     <li>For each additional paper, an extra fee of <strong>$200</strong> will be charged</li>
                                     <li>Each paper is limited to 12 pages. Extra pages (maximum 2) will be charged at <strong>$100 per page</strong></li>
+                                    <li>All payments made are final and non-refundable under any circumstances</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <!-- What's Included -->
                     <div class="card includes-card">
                         <div class="card-header">
                             <h3 class="card-title"><i class="fas fa-clipboard-check"></i> What's Included</h3>
@@ -520,8 +435,6 @@
                                     <tr>
                                         <th>Registration Type</th>
                                         <th>Conference Materials</th>
-                                        <th>Welcome Reception</th>
-                                        <th>Conference Dinner</th>
                                         <th>Lunches</th>
                                         <th>Coffee Breaks</th>
                                     </tr>
@@ -532,21 +445,15 @@
                                         <td><i class="fas fa-check check"></i></td>
                                         <td><i class="fas fa-check check"></i></td>
                                         <td><i class="fas fa-check check"></i></td>
-                                        <td><i class="fas fa-check check"></i></td>
-                                        <td><i class="fas fa-check check"></i></td>
                                     </tr>
                                     <tr>
                                         <td class="category-header">Student/Professional Presenter (Online)</td>
                                         <td><i class="fas fa-check check"></i></td>
                                         <td><i class="fas fa-times times"></i></td>
                                         <td><i class="fas fa-times times"></i></td>
-                                        <td><i class="fas fa-times times"></i></td>
-                                        <td><i class="fas fa-times times"></i></td>
                                     </tr>
                                     <tr>
                                         <td class="category-header">Participant (Onsite)</td>
-                                        <td><i class="fas fa-check check"></i></td>
-                                        <td><i class="fas fa-check check"></i></td>
                                         <td><i class="fas fa-check check"></i></td>
                                         <td><i class="fas fa-check check"></i></td>
                                         <td><i class="fas fa-check check"></i></td>
@@ -556,62 +463,12 @@
                                         <td><i class="fas fa-check check"></i></td>
                                         <td><i class="fas fa-times times"></i></td>
                                         <td><i class="fas fa-times times"></i></td>
-                                        <td><i class="fas fa-times times"></i></td>
-                                        <td><i class="fas fa-times times"></i></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- Payment Methods -->
-                    <div class="card payment-card">
-                        <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-credit-card"></i> Payment Methods</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="payment-methods-container">
-                                <!-- Bank Transfer -->
-                                <div class="payment-method">
-                                    <h4><i class="fas fa-university"></i> Bank Transfer</h4>
-                                    <p>Please transfer your registration fee to the following account:</p>
-                                    <div class="payment-details">
-                                        <p><strong>Bank Name:</strong> Bank Mandiri</p>
-                                        <p><strong>Account Name:</strong> IDEAS LAB Indonesia</p>
-                                        <p><strong>Account Number:</strong> 1234567890</p>
-                                        <p><strong>Swift Code:</strong> BMRIIDJA</p>
-                                        <p><strong>Reference:</strong> ICOT2025_[Your Name]_[Paper ID]</p>
-                                    </div>
-                                </div>
-                                
-                                <!-- E-Wallet Payment -->
-                                <div class="payment-method">
-                                    <h4><i class="fas fa-mobile-alt"></i> E-Wallet Payment</h4>
-                                    <p>We accept the following Indonesian e-wallet payments:</p>
-                                    <div class="payment-icons">
-                                        <img src="./assets/payment/ovo.png" alt="OVO">
-                                        <img src="./assets/payment/gopay.png" alt="GoPay">
-                                        <img src="./assets/payment/dana.png" alt="DANA">
-                                        <img src="./assets/payment/linkaja.png" alt="LinkAja">
-                                    </div>
-                                    <p>To pay using an e-wallet, please scan the QRIS code below:</p>
-                                    <div class="qr-code">
-                                        <img src="./assets/payment/qris-code.png" alt="QRIS Code">
-                                    </div>
-                                    <p>After payment, please email your payment confirmation to <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a> with your name and paper ID.</p>
-                                </div>
-                                
-                                <!-- Credit Card -->
-                                <div class="payment-method">
-                                    <h4><i class="fas fa-globe"></i> International Credit Card</h4>
-                                    <p>For international participants, we accept payment via credit card through our secure payment gateway.</p>
-                                    <a href="#" class="orange-button">Pay with Credit Card</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Registration Process -->
                     <div class="card process-card">
                         <div class="card-header">
                             <h3 class="card-title"><i class="fas fa-tasks"></i> Registration Process</h3>
@@ -621,6 +478,7 @@
                                 <li>Download the registration form <a href="./assets/docs/registration-form.pdf">here</a></li>
                                 <li>Fill out the form with your details</li>
                                 <li>Make the payment using one of the available methods</li>
+                                <li>All payments made are final and non-refundable under any circumstances</li>
                                 <li>Email the completed form and payment proof to <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a></li>
                                 <li>You will receive a confirmation email with your registration details</li>
                                 <li>For onsite participants, collect your conference kit at the registration desk</li>
@@ -639,7 +497,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-top">
@@ -647,7 +504,7 @@
                     <div class="footer-logo">
                         <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
                     </div>
-                    <h3 class="footer-title">IEEE-13th International Conference on Orange Technology</h3>
+                    <h3 class="footer-title">The 13th International Conference on Orange Technology</h3>
                     <p class="footer-description">
                         A premier forum for researchers, engineers, and practitioners to present and discuss the latest research, innovations, and applications in the field of Orange Technology.
                     </p>
@@ -687,66 +544,65 @@
             <div class="footer-divider"></div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 IEEE-13th International Conference on Orange Technology. All rights reserved.</p>
+                <p>&copy; 2025 The 13th International Conference on Orange Technology. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Supabase initialization -->
     <script src="./js/supabase.js"></script>
-    
-    <!-- Main JavaScript -->
     <script src="./js/script.js"></script>
-    
-    <!-- Section Loader Script -->
     <script src="./js/section-loader.js"></script>
     
-    <!-- JavaScript for mobile menu -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu toggle
-            const menuToggle = document.getElementById('menuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuIcon = document.getElementById('menuIcon');
-            
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function() {
-                    mobileMenu.classList.toggle('active');
-                    if (mobileMenu.classList.contains('active')) {
-                        menuIcon.classList.remove('fa-bars');
-                        menuIcon.classList.add('fa-times');
-                    } else {
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+                if (mobileMenu.classList.contains('active')) {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
+                } else {
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                }
+            });
+        }
+        
+        const navLinks = document.querySelectorAll('.nav-link[data-section], .mobile-nav-link[data-section]');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                const section = this.getAttribute('data-section');
+                
+                if (mobileMenu && mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    if (menuIcon) {
                         menuIcon.classList.remove('fa-times');
                         menuIcon.classList.add('fa-bars');
                     }
-                });
-            }
-            
-            // Handle navigation buttons like in the original index page
-            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    const section = this.getAttribute('data-section');
-                    
-                    // If section is home, just go to index
-                    if (section === 'home') {
-                        window.location.href = 'index.html';
-                    } else {
-                        window.location.href = 'index.html#' + section;
-                    }
-                    
-                    // Close mobile menu if open
-                    if (mobileMenu && mobileMenu.classList.contains('active')) {
-                        mobileMenu.classList.remove('active');
-                        if (menuIcon) {
-                            menuIcon.classList.remove('fa-times');
-                            menuIcon.classList.add('fa-bars');
-                        }
-                    }
-                });
+                }
+                
+                window.location.href = 'index.html#' + section;
             });
         });
+        
+        const activePageButtons = document.querySelectorAll('.nav-link.active-page, .mobile-nav-link.active-page');
+        activePageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                if (mobileMenu && mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    if (menuIcon) {
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                }
+            });
+        });
+    });
     </script>
 </body>
 </html>

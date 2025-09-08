@@ -181,6 +181,12 @@ section {
     font-weight: 600;
     font-size: 1rem;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 3.75rem - 1rem);
+    line-height: 1.2;
 }
 
 /* Desktop Navigation */
@@ -281,6 +287,48 @@ section {
 .mobile-nav-link:hover {
     color: #f97316;
     padding-left: 0.5rem;
+}
+
+/* Desktop registration link */
+.desktop-nav .registration-link {
+    background-color: #f97316 !important;
+    color: white !important;
+    padding: 10px 18px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+}
+
+.desktop-nav .registration-link:hover {
+    background-color: #ea580c !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3) !important;
+    color: white !important;
+}
+
+.desktop-nav .registration-link::after {
+    display: none !important;
+}
+
+/* Mobile registration link */
+.mobile-nav-link.registration-link {
+    background-color: #f97316 !important;
+    color: white !important;
+    padding: 12px 16px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    margin: 8px 0 !important;
+    display: block !important;
+    text-align: center !important;
+}
+
+.mobile-nav-link.registration-link:hover {
+    background-color: #ea580c !important;
+    color: white !important;
+    transform: translateX(5px) !important;
 }
 
 /* ==========================================================================
@@ -2178,6 +2226,10 @@ body.modal-open {
         width: 180px;
         height: 100px;
     }
+    .logo-binus {
+        width: 250px;
+        height: 250px;
+    }
     
     .speaker-detail-profile {
         grid-template-columns: 1fr;
@@ -2206,6 +2258,24 @@ body.modal-open {
         flex-basis: 100%;
         max-width: 300px;
     }
+}
+
+/* Styling untuk tombol registrasi */
+.registration-link {
+    background-color: #f97316 !important;
+    color: white !important;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.registration-link:hover {
+    background-color: #ea580c !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 /* Large screens (1024px and up) */

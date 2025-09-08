@@ -68,7 +68,7 @@ async function loadAllSections() {
             
             continue;
         }
-        n
+        
         try {
             console.log(`Loading new section: ${section.id}`);
             await section.load(supabase, prevSection);
@@ -145,7 +145,6 @@ async function loadInvitedSpeakersSection(supabase, prevSection, isExisting = fa
                     </div>
                 </div>
             `;
-            
             // Insert after previous section
             insertAfter(section, prevSection);
             contentContainer = section.querySelector('.invited-speakers-content');
@@ -913,33 +912,43 @@ async function loadDatesSection(supabase, prevSection, isExisting = false) {
         // Static dates data
         const dates = [
             {
-                label: "Full Paper Submission",
-                date: "31 July 2025",
+                label: "1st Full Paper Submission",
+                date: "31 August 2025",
+                type: "deadline"
+            },
+             {
+                label: "2nd Full Paper Submission",
+                date: "30 September 2025",
                 type: "deadline"
             },
             {
-                label: "Notification of Acceptance",
-                date: "31 August 2025",
+                label: "1st Notification of Acceptance",
+                date: " 30 September 2025",
+                type: "normal" 
+            },
+            {
+                label: "2nd Notification of Acceptance",
+                date: " 15 October 2025",
                 type: "normal" 
             },
             {
                 label: "Camera Ready Paper Submission",
-                date: "15 September 2025",
+                date: "25 October 2025",
                 type: "normal"
             },
             {
                 label: "Early Bird Registration",
-                date: "20 - 30 September 2025",
+                date: "10 November 2025",
                 type: "normal"
             },
             {
                 label: "Registration Deadline",
-                date: "18 October 2025",
+                date: "28 November 2025",
                 type: "normal"
             },
             {
                 label: "Conference",
-                date: "27-29 October 2025",
+                date: "1-3 December 2025",
                 type: "highlight"
             }
         ];
@@ -1333,9 +1342,6 @@ function formatMarkdown(content) {
         .replace(/\n/g, '<br>'); // Line breaks
 }
 
-/**
- * Load Paper Submission Section data from Supabase
- */
 async function loadPaperSubmissionSection(supabase, prevSection, isExisting = false) {
     const sectionId = 'submission';
     
@@ -1515,19 +1521,52 @@ async function loadPaperSubmissionSection(supabase, prevSection, isExisting = fa
                 `;
             }
             
-            // Add Important Dates section with link to main dates page
+            // Add Important Dates section with embedded conference details card
             submissionHtml += `
                 <div class="important-dates-section">
                     <h3 class="subsection-title">Important Dates</h3>
                     <div class="dates-summary">
                         <ul>
-                            <li><strong>Full Paper Submission:</strong> 31 July 2025</li>
-                            <li><strong>Notification of Acceptance:</strong> 31 August 2025</li>
-                            <li><strong>Camera Ready Paper Submission:</strong> 15 September 2025</li>
+                            <li><strong>1st Full Paper Submission:</strong> 31 August 2025</li>
+                            <li><strong>2nd Full Paper Submission:</strong> 30 September 2025</li>
+                            <li><strong>1st Notification of Acceptance:</strong> 30 September 2025</li>
+                            <li><strong>2st Notification of Acceptance:</strong> 15 October 2025</li>
+                            <li><strong>Camera Ready Paper Submission:</strong> 25 October 2025</li>
                         </ul>
-                        <p class="view-more-dates">
-                            <a href="#dates" class="dates-link" data-section="dates">View all important dates <i class="fas fa-arrow-right"></i></a>
+                        
+                        <div class="action-buttons">
+                            <a href="#dates" class="action-link internal-link" data-section="dates">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>View All Important Dates</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Embedded Conference Details Card -->
+                <div class="conference-details-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="card-title-section">
+                            <h3 class="card-title">IEEE Conference Details</h3>
+                            <p class="card-subtitle">Official IEEE Conference Portal</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p class="card-description">
+                            ICOT 2025 has been OFFICIALLY registered as one of IEEE Conference Events. Check the link for the details
                         </p>
+                        
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://conferences.ieee.org/conferences_events/conferences/conferencedetails/68409" 
+                           class="embedded-conference-link" target="_blank">
+                            <span>Visit IEEE Conference Portal</span>
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
                     </div>
                 </div>
             `;
@@ -1539,7 +1578,7 @@ async function loadPaperSubmissionSection(supabase, prevSection, isExisting = fa
             contentElement.innerHTML = submissionHtml;
             
             // Add event listener to the "View all important dates" link
-            const datesLink = contentElement.querySelector('.dates-link');
+            const datesLink = contentElement.querySelector('a[data-section="dates"]');
             if (datesLink) {
                 datesLink.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1551,7 +1590,7 @@ async function loadPaperSubmissionSection(supabase, prevSection, isExisting = fa
                 });
             }
             
-            // Add CSS for links if needed
+            // Add CSS for enhanced styling
             const existingStyle = document.getElementById('submission-links-style');
             if (!existingStyle) {
                 const style = document.createElement('style');
@@ -1574,6 +1613,161 @@ async function loadPaperSubmissionSection(supabase, prevSection, isExisting = fa
                     .note {
                         margin-top: 10px;
                         color: #555;
+                    }
+                    
+                    /* Action buttons styling */
+                    .action-buttons {
+                        margin-top: 1.5rem;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 1rem;
+                    }
+                    
+                    .action-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        padding: 0.75rem 1.25rem;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 8px;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+                    }
+                    
+                    .action-link:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                        color: white;
+                        text-decoration: none;
+                    }
+                    
+                    /* Conference Details Card */
+                    .conference-details-card {
+                        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                        border: 1px solid #e2e8f0;
+                        border-radius: 12px;
+                        margin-top: 2rem;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                        overflow: hidden;
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .conference-details-card:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .card-header {
+                        display: flex;
+                        align-items: center;
+                        padding: 1.5rem;
+                        background: linear-gradient(135deg, #FF6F00, #E65100);
+                        color: white;
+                    }
+                    
+                    .card-icon {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50px;
+                        height: 50px;
+                        background: rgba(255, 255, 255, 0.2);
+                        border-radius: 50%;
+                        margin-right: 1rem;
+                        font-size: 1.5rem;
+                    }
+                    
+                    .card-title {
+                        font-size: 1.25rem;
+                        font-weight: 600;
+                        margin: 0 0 0.25rem 0;
+                    }
+                    
+                    .card-subtitle {
+                        font-size: 0.9rem;
+                        opacity: 0.9;
+                        margin: 0;
+                    }
+                    
+                    .card-content {
+                        padding: 1.5rem;
+                    }
+                    
+                    .card-description {
+                        color: #64748b;
+                        line-height: 1.6;
+                        margin-bottom: 1.5rem;
+                    }
+                    
+                    .card-features {
+                        display: grid;
+                        gap: 0.75rem;
+                    }
+                    
+                    .feature-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        color: #374151;
+                        font-size: 0.9rem;
+                    }
+                    
+                    .feature-item i {
+                        color: #FF6F00;
+                        font-size: 1rem;
+                    }
+                    
+                    .card-footer {
+                        padding: 1rem 1.5rem 1.5rem;
+                        background: #f8fafc;
+                    }
+                    
+                    .embedded-conference-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        padding: 0.875rem 1.5rem;
+                        background: linear-gradient(135deg, #FF6F00, #E65100);
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 8px;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 2px 4px rgba(255, 111, 0, 0.2);
+                        width: 100%;
+                        justify-content: center;
+                    }
+                    
+                    .embedded-conference-link:hover {
+                        background: linear-gradient(135deg, #E65100, #BF360C);
+                        transform: translateY(-1px);
+                        box-shadow: 0 4px 12px rgba(255, 111, 0, 0.3);
+                        color: white;
+                        text-decoration: none;
+                    }
+                    
+                    /* Responsive design */
+                    @media (max-width: 768px) {
+                        .card-header {
+                            flex-direction: column;
+                            text-align: center;
+                            padding: 1.25rem;
+                        }
+                        
+                        .card-icon {
+                            margin-right: 0;
+                            margin-bottom: 0.75rem;
+                        }
+                        
+                        .action-buttons {
+                            flex-direction: column;
+                        }
+                        
+                        .action-link {
+                            justify-content: center;
+                        }
                     }
                 `;
                 document.head.appendChild(style);
@@ -1660,20 +1854,6 @@ async function loadParticipantInfoSection(supabase, prevSection, isExisting = fa
         const participantInfoHTML = `
             <div class="participant-info-container">
                 <div class="info-cards">
-                    <!-- Registration Card -->
-                    <div class="info-card">
-                        <div class="info-card-icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="info-card-content">
-                            <h3 class="info-card-title">Registration</h3>
-                            <p class="info-card-text">Information about how to register for ICOT 2025, including fees, deadlines, and payment methods.</p>
-                            <a href="registration.html" class="info-card-link">
-                                <span>View Registration Details</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
 
                     <!-- Venue Card -->
                     <div class="info-card">
@@ -1727,7 +1907,7 @@ async function loadParticipantInfoSection(supabase, prevSection, isExisting = fa
                         <h3>Important Notice for Participants</h3>
                     </div>
                     <div class="notice-content">
-                        <p>Early bird registration will end on <strong>September 30, 2025</strong>. Register early for discounted rates!</p>
+                        <p>Early bird registration will end on <strong>November 10, 2025</strong>. Register early for discounted rates!</p>
                         <p>For visa support letters or any special accommodations, please contact us at <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a></p>
                     </div>
                 </div>
@@ -1890,22 +2070,7 @@ function addParticipantInfoCSS() {
     document.head.appendChild(style);
 }
 
-// Update the sections list in the loadAllSections function
-// Add this section to the sections array
-// Example:
-/*
-const sections = [
-    { id: 'speakers', title: 'Keynote Speakers', load: loadSpeakersSection },
-    { id: 'invited-speakers', title: 'Invited Speakers', load: loadInvitedSpeakersSection },
-    { id: 'committee', title: 'Organizing Committee', load: loadCommitteeSection },
-    { id: 'program', title: 'Program Schedule', load: loadSimpleTbaSection },
-    { id: 'dates', title: 'Important Dates', load: loadDatesSection },
-    { id: 'papers', title: 'Call For Papers', load: loadPapersSection },
-    { id: 'submission', title: 'Paper Submission', load: loadPaperSubmissionSection },
-    { id: 'participant-info', title: 'Participant Information', load: loadParticipantInfoSection },
-    { id: 'registration', title: 'Registration', load: loadSimpleTbaSection }
-];
-*/
+
 
 /**
  * Load Tourist Attractions Section data from Supabase
@@ -2007,10 +2172,6 @@ function renderAttractions(attractions, contentElement) {
     
     let attractionsHtml = `
         <div class="attractions-container">
-            <div class="attractions-intro">
-                <p>Bandung, known as the "Paris of Java," offers a variety of attractions for conference attendees to explore. Here are some recommended places to visit during your stay for ICOT 2025:</p>
-            </div>
-            
             <div class="category-filter">
                 <button class="filter-button active" data-category="all">All</button>
                 ${categories.map(category => `
@@ -2018,52 +2179,72 @@ function renderAttractions(attractions, contentElement) {
                 `).join('')}
             </div>
             
-            <div class="attractions-grid">
+            <div class="attractions-gallery">
     `;
     
     // Add each attraction
     attractions.forEach(attraction => {
         const mainCategory = attraction.category.split(',')[0].trim();
         const categoryClass = mainCategory.toLowerCase().replace(/\s+/g, '-');
+        const shortDescription = shortenText(attraction.description, 100);
+        const hasLongDescription = attraction.description.length > 100;
+        
+        // Determine if it's Instagram or website based on URL
+        const isInstagram = attraction.website && attraction.website.includes('instagram.com');
+        const linkLabel = isInstagram ? 'Instagram' : 'Website';
+        const linkIcon = isInstagram ? 'fab fa-instagram' : 'fas fa-globe';
         
         attractionsHtml += `
-            <div class="attraction-card" data-category="${categoryClass}">
-                <div class="attraction-image">
-                    <img src="${attraction.image_url || 'https://placehold.co/600x400/f97316/white?text=Attraction'}" alt="${attraction.name}">
-                </div>
-                <div class="attraction-content">
-                    <h3 class="attraction-name">${attraction.name}</h3>
-                    <span class="attraction-category">${attraction.category}</span>
-                    <p class="attraction-description">${attraction.description}</p>
-                    <div class="attraction-details">
-                        <div class="detail-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>${attraction.address}</span>
+            <div class="gallery-item" data-category="${categoryClass}">
+                <div class="gallery-card">
+                    <div class="gallery-image">
+                        <img src="${attraction.image_url || 'https://placehold.co/600x400/f97316/white?text=Attraction'}" alt="${attraction.name}">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">${attraction.name}</h3>
+                            <span class="gallery-category">${mainCategory}</span>
                         </div>
-                        ${attraction.website ? `
-                        <div class="detail-item">
-                            <i class="fas fa-globe"></i>
-                            <a href="${attraction.website}" target="_blank">Visit Website</a>
+                    </div>
+                    <div class="gallery-details">
+                        <div class="gallery-description">
+                            <p class="description-short">${shortDescription}</p>
+                            ${hasLongDescription ? `
+                            <p class="description-full hidden">${attraction.description}</p>
+                            <button class="description-toggle">
+                                <span class="toggle-text">Show More</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            ` : ''}
                         </div>
-                        ` : ''}
-                        <div class="detail-item">
-                            <i class="fas fa-map"></i>
-                            <a href="${attraction.google_maps}" target="_blank">View on Google Maps</a>
-                        </div>
-                        <div class="detail-item price-info">
-                            <i class="fas fa-ticket-alt"></i>
-                            <div class="price-details">
-                                <span>Domestic: ${attraction.domestic_price}</span>
-                                <span>International: ${attraction.international_price}</span>
-                            </div>
+                        
+                        <span class="gallery-location">
+                            <i class="fas fa-map-marker-alt"></i> <span class="full-address">${attraction.address}</span>
+                        </span>
+                        <div class="gallery-links">
+                            ${attraction.website ? `
+                            <a href="${attraction.website}" target="_blank" class="gallery-link">
+                                <i class="${linkIcon}"></i> <span>${linkLabel}</span>
+                            </a>
+                            ` : ''}
+                            <a href="${attraction.google_maps}" target="_blank" class="gallery-link">
+                                <i class="fas fa-map"></i> <span>Maps</span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         `;
     });
-    
     attractionsHtml += `
+            </div>
+            <div class="gallery-navigation">
+                <button class="nav-button load-more">
+                    <span>View More Attractions</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <button class="nav-button load-less hidden">
+                    <span>View Less</span>
+                    <i class="fas fa-chevron-up"></i>
+                </button>
             </div>
         </div>
     `;
@@ -2071,40 +2252,202 @@ function renderAttractions(attractions, contentElement) {
     // Update content
     contentElement.innerHTML = attractionsHtml;
     
-    // Add event listeners for filtering
+    // Add event listeners for filtering and toggles
     setTimeout(() => {
         const filterButtons = document.querySelectorAll('.filter-button');
-        const attractionCards = document.querySelectorAll('.attraction-card');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const loadMoreBtn = document.querySelector('.load-more');
+        const loadLessBtn = document.querySelector('.load-less');
+        const descriptionToggles = document.querySelectorAll('.description-toggle');
         
+        const itemsPerPage = 6;
+        let currentPage = 1;
+        
+        // Initially hide items beyond initial count
+        galleryItems.forEach((item, index) => {
+            if (index >= itemsPerPage) {
+                item.classList.add('hidden');
+            }
+        });
+        
+        // Update load more/less button visibility
+        updateLoadMoreButton();
+        
+        // Handle description toggle buttons
+        descriptionToggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const description = this.closest('.gallery-description');
+                const shortDesc = description.querySelector('.description-short');
+                const fullDesc = description.querySelector('.description-full');
+                const toggleText = this.querySelector('.toggle-text');
+                const toggleIcon = this.querySelector('i');
+                
+                if (fullDesc.classList.contains('hidden')) {
+                    // Show full description
+                    shortDesc.classList.add('hidden');
+                    fullDesc.classList.remove('hidden');
+                    toggleText.textContent = 'Show Less';
+                    toggleIcon.classList.remove('fa-chevron-down');
+                    toggleIcon.classList.add('fa-chevron-up');
+                } else {
+                    // Show short description
+                    shortDesc.classList.remove('hidden');
+                    fullDesc.classList.add('hidden');
+                    toggleText.textContent = 'Show More';
+                    toggleIcon.classList.remove('fa-chevron-up');
+                    toggleIcon.classList.add('fa-chevron-down');
+                }
+            });
+        });
+        
+        // Handle filter button clicks
         filterButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const category = this.dataset.category;
+                currentPage = 1; // Reset to first page when filtering
                 
                 // Update active button
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
                 
-                // Filter cards
-                attractionCards.forEach(card => {
-                    if (category === 'all' || card.dataset.category === category) {
-                        card.style.display = 'flex';
+                // Filter items
+                let visibleCount = 0;
+                galleryItems.forEach((item, index) => {
+                    const shouldShow = category === 'all' || item.dataset.category === category;
+                    
+                    if (shouldShow) {
+                        item.classList.remove('filtered-out');
+                        
+                        if (visibleCount < itemsPerPage) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                        
+                        visibleCount++;
                     } else {
-                        card.style.display = 'none';
+                        item.classList.add('hidden', 'filtered-out');
                     }
                 });
+                
+                // Update load more/less button
+                loadLessBtn.classList.add('hidden');
+                updateLoadMoreButton();
             });
         });
+        
+        // Handle load more button
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function() {
+                const category = document.querySelector('.filter-button.active').dataset.category;
+                let shown = 0;
+                let newlyShown = 0;
+                
+                galleryItems.forEach(item => {
+                    const matchesCategory = category === 'all' || item.dataset.category === category;
+                    
+                    if (matchesCategory && !item.classList.contains('filtered-out')) {
+                        if (item.classList.contains('hidden')) {
+                            if (newlyShown < itemsPerPage) {
+                                item.classList.remove('hidden');
+                                newlyShown++;
+                            }
+                        } else {
+                            shown++;
+                        }
+                    }
+                });
+                
+                currentPage++;
+                loadLessBtn.classList.remove('hidden');
+                updateLoadMoreButton();
+            });
+        }
+        
+        // Handle load less button
+        if (loadLessBtn) {
+            loadLessBtn.addEventListener('click', function() {
+                const category = document.querySelector('.filter-button.active').dataset.category;
+                let visibleCount = 0;
+                let hiddenCount = 0;
+                
+                // Count visible items
+                galleryItems.forEach(item => {
+                    const matchesCategory = category === 'all' || item.dataset.category === activeCategory;
+                    if (matchesCategory && !item.classList.contains('filtered-out') && !item.classList.contains('hidden')) {
+                        visibleCount++;
+                    }
+                });
+                
+                // Hide items beyond the first page
+                galleryItems.forEach(item => {
+                    const matchesCategory = category === 'all' || item.dataset.category === activeCategory;
+                    
+                    if (matchesCategory && !item.classList.contains('filtered-out')) {
+                        if (visibleCount > itemsPerPage) {
+                            item.classList.add('hidden');
+                            visibleCount--;
+                            hiddenCount++;
+                        }
+                    }
+                });
+                
+                currentPage = 1;
+                
+                // If we're back to page 1, hide the "View Less" button
+                if (hiddenCount > 0) {
+                    loadMoreBtn.classList.remove('hidden');
+                }
+                
+                if (currentPage <= 1) {
+                    loadLessBtn.classList.add('hidden');
+                }
+            });
+        }
+        
+        // Function to update load more button visibility
+        function updateLoadMoreButton() {
+            const activeCategory = document.querySelector('.filter-button.active').dataset.category;
+            let totalVisible = 0;
+            let currentlyShown = 0;
+            
+            galleryItems.forEach(item => {
+                const matchesCategory = activeCategory === 'all' || item.dataset.category === activeCategory;
+                
+                if (matchesCategory && !item.classList.contains('filtered-out')) {
+                    totalVisible++;
+                    if (!item.classList.contains('hidden')) {
+                        currentlyShown++;
+                    }
+                }
+            });
+            
+            if (currentlyShown >= totalVisible) {
+                loadMoreBtn.classList.add('hidden');
+            } else {
+                loadMoreBtn.classList.remove('hidden');
+            }
+            
+            if (currentlyShown <= itemsPerPage) {
+                loadLessBtn.classList.add('hidden');
+            }
+        }
     }, 100);
     
-    // Add CSS for tourist attractions
-    addTouristAttractionCSS();
+    // Add CSS for gallery
+    addAttractionsGalleryCSS();
 }
 
-/**
- * Add CSS for tourist attractions section
- */
-function addTouristAttractionCSS() {
-    const styleId = 'tourist-attractions-styles';
+// Helper function to shorten text
+function shortenText(text, maxLength) {
+    if (!text || text.length <= maxLength) return text;
+    
+    const lastSpace = text.substring(0, maxLength).lastIndexOf(' ');
+    return text.substring(0, lastSpace > 0 ? lastSpace : maxLength) + '...';
+}
+
+function addAttractionsGalleryCSS() {
+    const styleId = 'attractions-gallery-styles';
     
     // Check if styles already exist
     if (document.getElementById(styleId)) {
@@ -2117,28 +2460,13 @@ function addTouristAttractionCSS() {
     style.textContent = `
         .tourist-attractions-section {
             background: linear-gradient(to bottom, #fff, #fff7ed, #fff);
-            padding: 4rem 0;
+            padding: 3rem 0;
         }
         
         .attractions-container {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
             max-width: 1280px;
             margin: 0 auto;
-        }
-        
-        .attractions-intro {
-            margin-bottom: 1rem;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .attractions-intro p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #555;
+            padding: 0 1rem;
         }
         
         .category-filter {
@@ -2150,7 +2478,7 @@ function addTouristAttractionCSS() {
         }
         
         .filter-button {
-            padding: 0.6rem 1.2rem;
+            padding: 0.5rem 1.5rem;
             background-color: #f5f5f5;
             border: none;
             border-radius: 30px;
@@ -2171,143 +2499,239 @@ function addTouristAttractionCSS() {
             font-weight: 500;
         }
         
-        .attractions-grid {
+        .attractions-gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
         }
         
-        .attraction-card {
-            display: flex;
-            flex-direction: column;
+        .gallery-item {
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item.hidden {
+            display: none;
+        }
+        
+        .gallery-card {
             background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         
-        .attraction-card:hover {
+        .gallery-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
-        .attraction-image {
-            height: 200px;
+        .gallery-image {
+            position: relative;
+            height: 220px;
             overflow: hidden;
         }
         
-        .attraction-image img {
+        .gallery-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
         }
         
-        .attraction-card:hover .attraction-image img {
+        .gallery-card:hover .gallery-image img {
             transform: scale(1.1);
         }
         
-        .attraction-content {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 1rem 1rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            color: white;
+            transition: transform 0.3s ease;
         }
         
-        .attraction-name {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            color: #333;
+        .gallery-title {
+            font-size: 1.2rem;
+            margin: 0 0 0.3rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
         
-        .attraction-category {
+        .gallery-category {
             display: inline-block;
             font-size: 0.8rem;
-            background-color: #fff7ed;
-            padding: 0.3rem 0.6rem;
+            background-color: rgba(249, 115, 22, 0.8);
+            padding: 0.2rem 0.6rem;
             border-radius: 20px;
-            margin-bottom: 1rem;
-            color: #f97316;
-            font-weight: 500;
+            text-shadow: none;
         }
         
-        .attraction-description {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #555;
-            margin-bottom: 1.2rem;
-        }
-        
-        .attraction-details {
-            margin-top: auto;
+        .gallery-details {
+            padding: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.7rem;
+            gap: 0.8rem;
+            flex-grow: 1;
         }
         
-        .detail-item {
+        .gallery-description {
+            position: relative;
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .description-short, .description-full {
+            margin: 0;
+        }
+        
+        .description-full {
+            margin-bottom: 0.5rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .description-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: none;
+            border: none;
+            color: #f97316;
+            font-size: 0.8rem;
+            padding: 0.3rem 0;
+            cursor: pointer;
+            margin-top: 0.3rem;
+        }
+        
+        .description-toggle:hover {
+            color: #ea580c;
+        }
+        
+        .description-toggle i {
+            font-size: 0.7rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .description-toggle:hover i {
+            transform: translateY(2px);
+        }
+        
+        .gallery-location {
             display: flex;
             align-items: flex-start;
             font-size: 0.9rem;
             color: #666;
+            line-height: 1.4;
         }
         
-        .detail-item i {
+        .gallery-location i {
             color: #f97316;
             margin-right: 0.5rem;
             margin-top: 0.2rem;
-            min-width: 16px;
+            flex-shrink: 0;
         }
         
-        .detail-item a {
+        .full-address {
+            word-break: break-word;
+        }
+        
+        .gallery-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+        
+        .gallery-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
             color: #f97316;
             text-decoration: none;
-            transition: color 0.2s ease;
+            transition: all 0.2s ease;
+            padding: 0.3rem 0;
         }
         
-        .detail-item a:hover {
+        .gallery-link:hover {
             color: #ea580c;
-            text-decoration: underline;
+            transform: translateX(3px);
         }
         
-        .price-info {
-            border-top: 1px dashed #eee;
-            padding-top: 0.7rem;
-            margin-top: 0.3rem;
-        }
-        
-        .price-details {
+        .gallery-navigation {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #f97316;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button.hidden {
+            display: none;
+        }
+        
+        .nav-button:hover {
+            background-color: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+        
+        .load-more i, .load-less i {
+            transition: transform 0.3s ease;
+        }
+        
+        .load-more:hover i {
+            transform: translateY(3px);
+        }
+        
+        .load-less:hover i {
+            transform: translateY(-3px);
         }
         
         @media (max-width: 768px) {
-            .attractions-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            .attractions-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
             
-            .attraction-image {
-                height: 180px;
+            .gallery-image {
+                height: 200px;
             }
         }
         
         @media (max-width: 480px) {
+            .attractions-gallery {
+                grid-template-columns: 1fr;
+            }
+            
             .filter-button {
-                padding: 0.5rem 1rem;
+                padding: 0.4rem 1rem;
                 font-size: 0.8rem;
             }
             
-            .attraction-content {
-                padding: 1.2rem;
-            }
-            
-            .attraction-name {
-                font-size: 1.1rem;
-            }
-            
-            .attractions-grid {
-                grid-template-columns: 1fr;
+            .gallery-image {
+                height: 180px;
             }
         }
     `;
