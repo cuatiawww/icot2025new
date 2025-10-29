@@ -39,7 +39,7 @@ async function loadAllSections() {
 
     let prevSection = aboutSection || heroSection;
     const sections = [
-        { id: 'tourist-attractions', title: 'Tourist Attractions', load: loadTouristAttractionsSection },
+        // { id: 'tourist-attractions', title: 'Tourist Attractions', load: loadTouristAttractionsSection },
         { id: 'speakers', title: 'Keynote Speakers', load: loadSpeakersSection },
         { id: 'invited-speakers', title: 'Invited Speakers', load: loadInvitedSpeakersSection },
         { id: 'committee', title: 'Organizing Committee', load: loadCommitteeSection },
@@ -921,19 +921,19 @@ async function loadDatesSection(supabase, prevSection, isExisting = false) {
                 date: "30 September 2025",
                 type: "deadline"
             },
+            // {
+            //     label: "1st Notification of Acceptance",
+            //     date: " 30 September 2025",
+            //     type: "normal" 
+            // },
             {
-                label: "1st Notification of Acceptance",
-                date: " 30 September 2025",
-                type: "normal" 
-            },
-            {
-                label: "2nd Notification of Acceptance",
-                date: " 15 October 2025",
+                label: "Notification of Acceptance",
+                date: " 31 October 2025",
                 type: "normal" 
             },
             {
                 label: "Camera Ready Paper Submission",
-                date: "25 October 2025",
+                date: "10 November 2025",
                 type: "normal"
             },
             {
@@ -943,7 +943,7 @@ async function loadDatesSection(supabase, prevSection, isExisting = false) {
             },
             {
                 label: "Registration Deadline",
-                date: "28 November 2025",
+                date: "22 November 2025",
                 type: "normal"
             },
             {
@@ -1523,26 +1523,7 @@ async function loadPaperSubmissionSection(supabase, prevSection, isExisting = fa
             
             // Add Important Dates section with embedded conference details card
             submissionHtml += `
-                <div class="important-dates-section">
-                    <h3 class="subsection-title">Important Dates</h3>
-                    <div class="dates-summary">
-                        <ul>
-                            <li><strong>1st Full Paper Submission:</strong> 31 August 2025</li>
-                            <li><strong>2nd Full Paper Submission:</strong> 30 September 2025</li>
-                            <li><strong>1st Notification of Acceptance:</strong> 30 September 2025</li>
-                            <li><strong>2st Notification of Acceptance:</strong> 15 October 2025</li>
-                            <li><strong>Camera Ready Paper Submission:</strong> 25 October 2025</li>
-                        </ul>
-                        
-                        <div class="action-buttons">
-                            <a href="#dates" class="action-link internal-link" data-section="dates">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>View All Important Dates</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+               
                 
                 <!-- Embedded Conference Details Card -->
                 <div class="conference-details-card">
@@ -1893,7 +1874,7 @@ async function loadParticipantInfoSection(supabase, prevSection, isExisting = fa
                         <div class="info-card-content">
                             <h3 class="info-card-title">Hotel Booking</h3>
                             <p class="info-card-text">Information about hotel options, special rates for conference attendees, and how to book.</p>
-                            <a href="hotel-booking.html" class="info-card-link">
+                            <a href="hotel.html" class="info-card-link">
                                 <span>View Hotel Booking Details</span>
                                 <i class="fas fa-arrow-right"></i>
                             </a>

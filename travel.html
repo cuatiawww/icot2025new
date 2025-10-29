@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Information - The 13th ICOT 2025</title>
+    
+    <!-- CSS with version parameter to prevent caching -->
+    <link rel="stylesheet" href="styles.css?v=1.0.1">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Meta tags to prevent caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <style>
+        /* Venue Page Specific Styles */
+        .venue-section {
+            padding: 4rem 0;
+            background: linear-gradient(to bottom, #fff, #f9fafb);
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        
+        .section-divider {
+            width: 6rem;
+            height: 0.25rem;
+            background-color: #f97316;
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        
+        /* Card Styling */
+        .venue-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: #f97316;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .info-box {
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #f97316;
+            transition: all 0.3s ease;
+        }
+        
+        .info-box:hover {
+            background-color: #f3f4f6;
+            transform: translateX(5px);
+        }
+        
+        .info-box h3 {
+            color: #f97316;
+            font-size: 1.25rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-box p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-box ul {
+            padding-left: 1.5rem;
+            margin-bottom: 0;
+            color: #4b5563;
+        }
+        
+        .info-box li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .alert-info-custom {
+            background-color: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 1.25rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert-info-custom i {
+            color: #f97316;
+            margin-right: 0.75rem;
+        }
+        
+        .alert-info-custom ul {
+            margin-bottom: 0;
+            margin-top: 0.5rem;
+            padding-left: 2rem;
+        }
+        
+        /* Document Cards */
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .document-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.75rem;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .document-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f97316 0%, #ea580c 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .document-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(249, 115, 22, 0.15);
+            border-color: #f97316;
+            background: white;
+        }
+        
+        .document-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .document-icon {
+            color: #f97316;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .document-title {
+            color: #1a1a1a;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .document-card:hover .document-title {
+            color: #f97316;
+        }
+        
+        .document-description {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin: 0 0 1rem 0;
+            line-height: 1.6;
+        }
+        
+        .document-action {
+            color: #f97316;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 0.75rem;
+            border-top: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .document-card:hover .document-action {
+            color: #ea580c;
+        }
+        
+        .document-action i {
+            transition: transform 0.3s ease;
+            margin-right: 0.5rem;
+        }
+        
+        .document-card:hover .document-action i {
+            transform: translateY(2px);
+        }
+        
+        .info-link {
+            color: #f97316;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .info-link:hover {
+            color: #ea580c;
+            text-decoration: underline;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            margin: 0 2px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .mobile-nav-link {
+            color: white;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 12px 0;
+            width: 100%;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .mobile-nav-link:hover, .mobile-nav-link.active {
+            color: #f97316;
+        }
+        
+        /* Responsive styles */
+        @media (min-width: 768px) {
+            .venue-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .venue-card,
+            .transport-card,
+            .visa-card {
+                grid-column: span 2;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .documents-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="banner">
+        <div class="banner-container">
+            <span class="banner-text">The 13th ICOT 2025 !!! Conference Date (December 1 ~ 3, 2025) !!!</span>
+            <a href="#speakers" class="banner-button">Keynote Speech</a>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="logo-container">
+                <div class="logo">
+                    <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                </div>
+                <span class="logo-text">ICOT 2025</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <button class="nav-link" data-section="home">Home</button>
+                <button class="nav-link" data-section="about">About</button>
+                <button class="nav-link" data-section="speakers">Speakers</button>
+                <button class="nav-link" data-section="program">Program</button>
+                <button class="nav-link" data-section="committee">Committee</button>
+                <button class="nav-link" data-section="dates">Dates</button>
+                <button class="nav-link" data-section="papers">Papers</button>
+                <button class="nav-link" data-section="submission">Submission</button>
+                <button class="nav-link" data-section="participant-info">Participant Info</button>
+            </nav>
+
+            <!-- Mobile menu button -->
+            <div class="mobile-menu-button">
+                <button id="menuToggle">
+                    <i class="fas fa-bars" id="menuIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-items">
+                <button class="mobile-nav-link" data-section="home">Home</button>
+                <button class="mobile-nav-link" data-section="about">About</button>
+                <button class="mobile-nav-link" data-section="speakers">Speakers</button>
+                <button class="mobile-nav-link" data-section="program">Program</button>
+                <button class="mobile-nav-link" data-section="committee">Committee</button>
+                <button class="mobile-nav-link" data-section="dates">Dates</button>
+                <button class="mobile-nav-link" data-section="papers">Papers</button>
+                <button class="mobile-nav-link" data-section="submission">Submission</button>
+                <button class="mobile-nav-link" data-section="participant-info">Participant Info</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="main-content">
+        <section id="venue" class="venue-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2 class="section-title">Travel Information</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <!-- Venue Cards -->
+                <div class="venue-cards">
+                    <!-- Transportation Documents -->
+                    <div class="card transport-card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-file-alt"></i> Guidance Transportation Documents</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="documents-grid">
+                                <a href="./assets/docs/Guidelines_on_how_to_get_from_Soekarno_Hatta_Airport_to_Bandung.pptx" 
+                                   class="document-card" download>
+                                    <div class="document-icon">
+                                        <i class="fas fa-plane-departure"></i>
+                                    </div>
+                                    <h5 class="document-title">From Soekarno-Hatta Airport to Bandung</h5>
+                                    <p class="document-description">Complete guide on transportation options from Jakarta's main airport to Bandung city</p>
+                                    <div class="document-action">
+                                        <i class="fas fa-download"></i>Click to Download
+                                    </div>
+                                </a>
+                                
+                                <a href="./assets/docs/Guidelines_on_how_to_get_from_Bandung_to_Soekarno_Hatta_Airport.pdf" 
+                                   class="document-card" download>
+                                    <div class="document-icon">
+                                        <i class="fas fa-plane-arrival"></i>
+                                    </div>
+                                    <h5 class="document-title">From Bandung to Soekarno-Hatta Airport</h5>
+                                    <p class="document-description">Important information about return journey options and recommended travel times</p>
+                                    <div class="document-action">
+                                        <i class="fas fa-download"></i>Click to Download
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visa Information -->
+                    <div class="card visa-card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-passport"></i> Visa Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert-info-custom">
+                                <i class="fas fa-info-circle"></i>
+                                Indonesia offers various visa options for international visitors:
+                                <ul>
+                                    <li>Visa-free entry (for eligible countries)</li>
+                                    <li>Visa on Arrival (VOA) - 30 days, extendable once</li>
+                                    <li>E-visa application before travel</li>
+                                </ul>
+                            </div>
+
+                            <div class="info-box">
+                                <h3><i class="fas fa-passport"></i> Visa Requirements</h3>
+                                <p>Check your visa requirements on the <a href="https://www.imigrasi.go.id/" target="_blank" class="info-link">Indonesian Immigration website</a>.</p>
+                                <p>For visa support letters, please contact: <a href="mailto:icot2025@ideas-lab.org" class="info-link">icot2025@ideas-lab.org</a></p>
+                            </div>
+
+                            <div class="info-box">
+                                <h3><i class="fas fa-info-circle"></i> Important Notes</h3>
+                                <ul>
+                                    <li>Passport must be valid for at least 6 months</li>
+                                    <li>Proof of onward/return travel may be required</li>
+                                    <li>Visa regulations may change - check official sources</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conference Venue -->
+                    <div class="card venue-card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="fas fa-map-marker-alt"></i> Conference Venue</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-box">
+                                <h3><i class="fas fa-university"></i> Universitas Kristen Maranatha</h3>
+                                <p>The 13th International Conference on Orange Technology (ICOT 2025) will be held at:</p>
+                                <p><strong>Address:</strong> Universitas Kristen Maranatha, Jl. Prof. drg. Surya Sumantri No.65, Sukawarna, Kec. Sukajadi, Kota Bandung, Jawa Barat 40164, Indonesia</p>
+                            </div>
+                            
+                            <div class="info-box">
+                                <h3><i class="fas fa-info-circle"></i> About the Venue</h3>
+                                <p>Universitas Kristen Maranatha is one of Indonesia's premier private Christian universities, located in the heart of Bandung city. Founded in 1965, the university has established itself as a leading institution for higher education in Indonesia.</p>
+                                <p>The university's modern facilities and strategic location make it an ideal venue for international conferences, with state-of-the-art conference halls and advanced technological infrastructure.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                    </div>
+                    <h3 class="footer-title">The 13th International Conference on Orange Technology</h3>
+                    <p class="footer-description">
+                        A premier forum for researchers, engineers, and practitioners to present and discuss the latest research, innovations, and applications in the field of Orange Technology.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-nav">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#speakers">Speakers</a></li>
+                        <li><a href="index.html#program">Program</a></li>
+                        <li><a href="index.html#dates">Important Dates</a></li>
+                        <li><a href="index.html#papers">Call for Papers</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h3 class="footer-heading">Contact Us</h3>
+                    <ul class="contact-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Universitas Kristen Maranatha<br>Jl. Surya Sumantri No.65, Bandung,<br>West Java, Indonesia</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+628979400787">+62 897 9400 787</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 The 13th International Conference on Orange Technology. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Supabase initialization -->
+    <script src="./js/supabase.js"></script>
+    
+    <!-- Main JavaScript -->
+    <script src="./js/script.js"></script>
+    
+    <!-- Section Loader Script -->
+    <script src="./js/section-loader.js"></script>
+    
+    <!-- JavaScript for mobile menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('active');
+                    if (mobileMenu.classList.contains('active')) {
+                        menuIcon.classList.remove('fa-bars');
+                        menuIcon.classList.add('fa-times');
+                    } else {
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            // Handle navigation buttons
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    
+                    // If section is home, just go to index
+                    if (section === 'home') {
+                        window.location.href = 'index.html';
+                    } else {
+                        window.location.href = 'index.html#' + section;
+                    }
+                    
+                    // Close mobile menu if open
+                    if (mobileMenu && mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                        if (menuIcon) {
+                            menuIcon.classList.remove('fa-times');
+                            menuIcon.classList.add('fa-bars');
+                        }
+                    }
+                });
+            });
+            
+            // Highlight 'participant-info' in the navigation
+            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                if (link.getAttribute('data-section') === 'participant-info') {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

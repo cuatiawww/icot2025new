@@ -1,0 +1,1134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Hotels - The 13th ICOT 2025</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap for carousel -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Meta tags to prevent caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f9fafb;
+        }
+
+        /* Top Banner */
+        .banner {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .banner-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .banner-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .banner-button {
+            background: white;
+            color: #f97316;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .banner-button:hover {
+            background: #fff7ed;
+            transform: translateY(-2px);
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #1e293b;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .desktop-nav {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(249, 115, 22, 0.2);
+            color: #f97316;
+        }
+
+        .mobile-menu-button {
+            display: none;
+        }
+
+        .mobile-menu-button button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: #2d3748;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .mobile-nav-link {
+            color: white;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 0.75rem;
+            width: 100%;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-link:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-nav-link:hover,
+        .mobile-nav-link.active {
+            color: #f97316;
+            background: rgba(249, 115, 22, 0.1);
+        }
+
+        /* Main Content */
+        .hotels-section {
+            padding: 4rem 0;
+            min-height: 60vh;
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+        
+        .section-divider {
+            width: 6rem;
+            height: 0.25rem;
+            background-color: #f97316;
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+
+        /* Introduction Box */
+        .intro-box {
+            background: white;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .intro-box h3 {
+            color: #f97316;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .intro-box p {
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .register-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+
+        .register-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+            color: white;
+        }
+
+        /* Hotel Cards */
+        .hotel-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .hotel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.15);
+        }
+        
+        /* Carousel Styles */
+        .hotel-carousel {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hotel-carousel-img {
+            height: 400px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: rgba(249, 115, 22, 0.8);
+            border-radius: 50%;
+            padding: 20px;
+        }
+        
+        .carousel-indicators button {
+            background-color: #f97316;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .hotel-content {
+            padding: 2.5rem;
+        }
+        
+        .hotel-header {
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hotel-name {
+            color: #f97316;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .hotel-rating {
+            color: #ffc107;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hotel-rating .text-muted {
+            color: #6c757d !important;
+        }
+        
+        .hotel-location {
+            color: #6c757d;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .hotel-location i {
+            color: #f97316;
+        }
+
+        .hotel-location a {
+            color: #f97316;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .hotel-location a:hover {
+            color: #ea580c;
+            text-decoration: underline;
+        }
+        
+        .hotel-description {
+            color: #495057;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            text-align: justify;
+        }
+        
+        .section-subtitle {
+            color: #f97316;
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            background: #fff7ed;
+            transform: translateX(5px);
+        }
+        
+        .feature-item i {
+            color: #f97316;
+            font-size: 1.2rem;
+            min-width: 24px;
+        }
+        
+        .feature-text {
+            color: #495057;
+            font-size: 0.95rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3);
+            color: white;
+        }
+        
+        .btn-secondary-custom {
+            background: white;
+            color: #f97316;
+            padding: 0.9rem 2rem;
+            border: 2px solid #f97316;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary-custom:hover {
+            background: #f97316;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .distance-info {
+            background: #f9fafb;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .distance-info h6 {
+            color: #f97316;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .distance-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .distance-item:last-child {
+            border-bottom: none;
+        }
+        
+        .distance-label {
+            color: #495057;
+            font-weight: 500;
+        }
+        
+        .distance-value {
+            color: #f97316;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo img {
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            color: #94a3b8;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #f97316;
+        }
+
+        .footer-nav {
+            list-style: none;
+        }
+
+        .footer-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            color: #f97316;
+        }
+
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: #94a3b8;
+        }
+
+        .contact-list i {
+            color: #f97316;
+            margin-top: 0.25rem;
+        }
+
+        .contact-list a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-list a:hover {
+            color: #f97316;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 2rem 0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .desktop-nav {
+                gap: 0.25rem;
+            }
+
+            .nav-link {
+                padding: 0.6rem 0.75rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .banner-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .banner-text {
+                font-size: 1rem;
+            }
+
+            .desktop-nav {
+                display: none;
+            }
+
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .navbar-container {
+                flex-wrap: wrap;
+            }
+
+            .mobile-menu {
+                width: 100%;
+            }
+
+            .hotel-carousel,
+            .hotel-carousel-img {
+                height: 250px;
+            }
+            
+            .hotel-content {
+                padding: 1.5rem;
+            }
+            
+            .hotel-name {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-primary-custom,
+            .btn-secondary-custom {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .distance-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .intro-box {
+                padding: 1.5rem;
+            }
+
+            .intro-box h3 {
+                font-size: 1.5rem;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="banner">
+        <div class="banner-container">
+            <span class="banner-text">The 13th ICOT 2025 !!! Conference Date (December 1 ~ 3, 2025) !!!</span>
+            <a href="index.html#speakers" class="banner-button">Keynote Speech</a>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="logo-container">
+                <div class="logo">
+                    <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                </div>
+                <span class="logo-text">ICOT 2025</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <button class="nav-link" data-section="home">Home</button>
+                <button class="nav-link" data-section="about">About</button>
+                <button class="nav-link" data-section="speakers">Speakers</button>
+                <button class="nav-link" data-section="program">Program</button>
+                <button class="nav-link" data-section="committee">Committee</button>
+                <button class="nav-link" data-section="dates">Dates</button>
+                <button class="nav-link" data-section="papers">Papers</button>
+                <button class="nav-link" data-section="submission">Submission</button>
+                <button class="nav-link active" data-section="participant-info">Participant Info</button>
+            </nav>
+
+            <!-- Mobile menu button -->
+            <div class="mobile-menu-button">
+                <button id="menuToggle">
+                    <i class="fas fa-bars" id="menuIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-items">
+                <button class="mobile-nav-link" data-section="home">Home</button>
+                <button class="mobile-nav-link" data-section="about">About</button>
+                <button class="mobile-nav-link" data-section="speakers">Speakers</button>
+                <button class="mobile-nav-link" data-section="program">Program</button>
+                <button class="mobile-nav-link" data-section="committee">Committee</button>
+                <button class="mobile-nav-link" data-section="dates">Dates</button>
+                <button class="mobile-nav-link" data-section="papers">Papers</button>
+                <button class="mobile-nav-link" data-section="submission">Submission</button>
+                <button class="mobile-nav-link active" data-section="participant-info">Participant Info</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="main-content">
+        <section id="hotels" class="hotels-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2 class="section-title">Recommended Hotels</h2>
+                    <div class="section-divider"></div>
+                </div>
+
+                <!-- Introduction Box -->
+                <div class="intro-box">
+                    <h3><i class="fas fa-hotel me-3"></i>Accommodation for ICOT 2025</h3>
+                    <p>We have partnered with premium hotels near the conference venue to provide comfortable accommodation for all attendees. Both hotels offer excellent facilities, easy access to Universitas Kristen Maranatha, and special rates for conference participants.</p>
+                    
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScvSlvvOvEXi77zlVf0dKZVaaWlioU2SYFVJVm7xCSAyeEiAQ/viewform" 
+                       target="_blank" 
+                       class="register-button">
+                        <i class="fas fa-clipboard-list"></i>
+                        Register Your Hotel Booking
+                    </a>
+                </div>
+
+                <!-- Hotel 1: Aston Pasteur -->
+                <div class="hotel-card">
+                    <div id="astonCarousel" class="carousel slide hotel-carousel" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#astonCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#astonCarousel" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#astonCarousel" data-bs-slide-to="2"></button>
+                        </div>
+                        
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="./assets/roomaston1.webp" class="d-block w-100 hotel-carousel-img" alt="Aston Pasteur Exterior">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./assets/roomaston2.webp" class="d-block w-100 hotel-carousel-img" alt="Aston Pasteur Room">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./assets/roomaston3.webp" class="d-block w-100 hotel-carousel-img" alt="Aston Pasteur Pool">
+                            </div>
+                        </div>
+                        
+                        <button class="carousel-control-prev" type="button" data-bs-target="#astonCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#astonCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    
+                    <div class="hotel-content">
+                        <div class="hotel-header">
+                            <h3 class="hotel-name">Aston Pasteur Hotel</h3>
+                            <div class="hotel-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="ms-2 text-muted">4-Star Hotel</span>
+                            </div>
+                            <div class="hotel-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <a href="https://maps.app.goo.gl/RyfHrSo6fR1bjvzj8" target="_blank">
+                                    <span>Jl. Dr. Djunjunan No.96-98, Pasteur, Bandung</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <p class="hotel-description">
+                            Aston Pasteur Hotel is a contemporary 4-star hotel located in the heart of Pasteur area, one of Bandung's most vibrant districts. The hotel features modern architecture with comfortable rooms, excellent dining options, and comprehensive business facilities. Its strategic location provides easy access to shopping centers, culinary destinations, and the conference venue at Universitas Kristen Maranatha.
+                        </p>
+
+                        <h5 class="section-subtitle">
+                            <i class="fas fa-check-circle"></i>Hotel Facilities
+                        </h5>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-wifi"></i>
+                                <span class="feature-text">WiFi</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-utensils"></i>
+                                <span class="feature-text">Restaurant & Bar Rooftop</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-swimming-pool"></i>
+                                <span class="feature-text">Outdoor Pool</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-dumbbell"></i>
+                                <span class="feature-text">Fitness Center</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span class="feature-text">Meeting Rooms</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-concierge-bell"></i>
+                                <span class="feature-text">24/7 Room Service</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-parking"></i>
+                                <span class="feature-text">Free Parking</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-coffee"></i>
+                                <span class="feature-text">Complimentary Breakfast</span>
+                            </div>
+                        </div>
+
+                        <div class="distance-info">
+                            <h6>
+                                <i class="fas fa-route me-2"></i>Distance Information
+                            </h6>
+                            <div class="distance-item">
+                                <span class="distance-label">
+                                    <i class="fas fa-university me-2"></i>To Conference Venue (Maranatha University)
+                                </span>
+                                <span class="distance-value">2.5 km / 10 min drive</span>
+                            </div>
+                            <div class="distance-item">
+                                <span class="distance-label">
+                                    <i class="fas fa-shopping-bag me-2"></i>To Pasteur Shopping Area
+                                </span>
+                                <span class="distance-value">Walking distance</span>
+                            </div>
+                            <div class="distance-item">
+                                <span class="distance-label">
+                                    <i class="fas fa-plane me-2"></i>To Husein Sastranegara Airport
+                                </span>
+                                <span class="distance-value">5 km / 15 min drive</span>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="https://www.astonpasteurhotel.com" target="_blank" class="btn-primary-custom">
+                                <i class="fas fa-external-link-alt"></i>Visit Hotel Website
+                            </a>
+                            <a href="mailto:icot2025@ideas-lab.org" class="btn-secondary-custom">
+                                <i class="fas fa-envelope"></i>Contact for Booking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 2: Rooms Inc -->
+                <div class="hotel-card">
+                    <div id="roomsIncCarousel" class="carousel slide hotel-carousel" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#roomsIncCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#roomsIncCarousel" data-bs-slide-to="1"></button>
+                        </div>
+                        
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="./assets/roombtc1.jpeg" class="d-block w-100 hotel-carousel-img" alt="Rooms Inc Exterior">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="./assets/room1.avif" class="d-block w-100 hotel-carousel-img" alt="Rooms Inc Lobby">
+                            </div>
+                        </div>
+                        
+                        <button class="carousel-control-prev" type="button" data-bs-target="#roomsIncCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#roomsIncCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    
+                    <div class="hotel-content">
+                        <div class="hotel-header">
+                            <h3 class="hotel-name">Rooms Inc Hotel Bandung</h3>
+                            <div class="hotel-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="ms-2 text-muted">2-Star Hotel</span>
+                            </div>
+                            <div class="hotel-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <a href="https://maps.app.goo.gl/jnYFTc1j5MJP9HXx7" target="_blank">
+                                    <span>Jl. Dr. Djunjunan No.116-118, Pasteur, Bandung</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <p class="hotel-description">
+                            Rooms Inc Hotel offers a unique boutique hotel experience with modern minimalist design and personalized service. Known for its innovative room concepts and contemporary aesthetics, the hotel provides a fresh take on hospitality in Bandung. Each room is designed with comfort and functionality in mind, featuring smart technology integration and eco-friendly amenities.
+                        </p>
+
+                        <h5 class="section-subtitle">
+                            <i class="fas fa-check-circle"></i>Hotel Facilities
+                        </h5>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-wifi"></i>
+                                <span class="feature-text">WiFi</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-laptop"></i>
+                                <span class="feature-text">Meeting Room</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span class="feature-text">24/7 Security</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-concierge-bell"></i>
+                                <span class="feature-text">Concierge Service</span>
+                            </div>
+                        </div>
+
+                        <div class="distance-info">
+                            <h6>
+                                <i class="fas fa-route me-2"></i>Distance Information
+                            </h6>
+                            <div class="distance-item">
+                                <span class="distance-label">
+                                    <i class="fas fa-university me-2"></i>To Conference Venue (Maranatha University)
+                                </span>
+                                <span class="distance-value">2.8 km / 12 min drive</span>
+                            </div>
+                            <div class="distance-item">
+                                <span class="distance-label">
+                                    <i class="fas fa-shopping-bag me-2"></i>To Cihampelas Walk
+                                </span>
+                                <span class="distance-value">1.5 km / 5 min drive</span>
+                            </div>
+                            <div class="distance-item">
+                                <span class="distance-label">
+                                    <i class="fas fa-plane me-2"></i>To Husein Sastranegara Airport
+                                </span>
+                                <span class="distance-value">4.5 km / 12 min drive</span>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="https://www.roomsinc.co.id" target="_blank" class="btn-primary-custom">
+                                <i class="fas fa-external-link-alt"></i>Visit Hotel Website
+                            </a>
+                            <a href="mailto:icot2025@ideas-lab.org" class="btn-secondary-custom">
+                                <i class="fas fa-envelope"></i>Contact for Booking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <img src="./assets/ICOT-logo.png" alt="ICOT Logo">
+                    </div>
+                    <h3 class="footer-title">The 13th International Conference on Orange Technology</h3>
+                    <p class="footer-description">
+                        A premier forum for researchers, engineers, and practitioners to present and discuss the latest research, innovations, and applications in the field of Orange Technology.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-nav">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#speakers">Speakers</a></li>
+                        <li><a href="index.html#program">Program</a></li>
+                        <li><a href="index.html#dates">Important Dates</a></li>
+                        <li><a href="index.html#papers">Call for Papers</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h3 class="footer-heading">Contact Us</h3>
+                    <ul class="contact-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Universitas Kristen Maranatha<br>Jl. Surya Sumantri No.65, Bandung,<br>West Java, Indonesia</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+628979400787">+62 897 9400 787</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 The 13th International Conference on Orange Technology. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Supabase initialization -->
+    <script src="./js/supabase.js"></script>
+    
+    <!-- Main JavaScript -->
+    <script src="./js/script.js"></script>
+    
+    <!-- JavaScript for mobile menu and navigation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('active');
+                    if (mobileMenu.classList.contains('active')) {
+                        menuIcon.classList.remove('fa-bars');
+                        menuIcon.classList.add('fa-times');
+                    } else {
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            // Handle navigation buttons
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    
+                    // If section is home, just go to index
+                    if (section === 'home') {
+                        window.location.href = 'index.html';
+                    } else {
+                        window.location.href = 'index.html#' + section;
+                    }
+                    
+                    // Close mobile menu if open
+                    if (mobileMenu && mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                        if (menuIcon) {
+                            menuIcon.classList.remove('fa-times');
+                            menuIcon.classList.add('fa-bars');
+                        }
+                    }
+                });
+            });
+            
+            // Highlight 'participant-info' in the navigation
+            document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                if (link.getAttribute('data-section') === 'participant-info') {
+                    link.classList.add('active');
+                }
+            });
+
+            // Smooth scroll for internal page links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#' && href.length > 1) {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

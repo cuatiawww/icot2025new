@@ -43,6 +43,78 @@
             margin: 0 auto;
             border-radius: 9999px;
         }
+
+        /* Document Links Section */
+        .document-links {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 15px rgba(249, 115, 22, 0.2);
+        }
+
+        .document-links h3 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .document-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .doc-button {
+            background: white;
+            color: #f97316;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+        }
+
+        .doc-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: rgba(249, 115, 22, 0.3);
+            color: #ea580c;
+        }
+
+        .doc-icon {
+            font-size: 2rem;
+            color: #f97316;
+            min-width: 2rem;
+        }
+
+        .doc-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: #111827;
+        }
+
+        .doc-content p {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .doc-button:hover .doc-icon {
+            color: #ea580c;
+        }
         
         .registration-cards {
             display: grid;
@@ -297,6 +369,14 @@
         }
         
         @media (max-width: 768px) {
+            .document-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .doc-button {
+                padding: 1.25rem;
+            }
+            
             .registration-table,
             .includes-table {
                 display: block;
@@ -304,6 +384,71 @@
                 white-space: nowrap;
             }
         }
+.extra-links {
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0;
+}
+
+.extra-card {
+    background: #fff;
+    border: 1px solid #ffe0c2;
+    box-shadow: 0 6px 16px rgba(249, 115, 22, 0.15);
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 600px;
+    text-align: center;
+}
+
+.extra-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #f97316;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.extra-desc {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.extra-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.extra-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: white;
+    font-weight: 500;
+    padding: 0.9rem 1.5rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(249, 115, 22, 0.3);
+}
+
+.extra-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 12px rgba(234, 88, 12, 0.25);
+    background: linear-gradient(135deg, #ea580c, #f97316);
+}
+
+.extra-button i {
+    font-size: 1.2rem;
+}
+
+
     </style>
 </head>
 <body>
@@ -365,6 +510,34 @@
                     <div class="section-divider"></div>
                 </div>
 
+                <!-- Additional Action Buttons Section -->
+<div class="extra-links">
+    <div class="extra-card">
+        <h3>
+            <i class="fas fa-link"></i>
+            Registration & Booking
+        </h3>
+        <p class="extra-desc">
+            Use the links below to easily access the online registration and official hotel booking pages.
+        </p>
+
+        <div class="extra-buttons">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf-oFMoHhYn8nf99BQv5adwblxzIDLLuhBOcQ8qWJPYscgjBA/viewform" class="extra-button" target="_blank">
+                <i class="fas fa-user-edit"></i>
+                <span>Complete Your Registration</span>
+            </a>
+            <a href="https://forms.gle/rV2ZhMSGn3DeiYKm6" class="extra-button" target="_blank">
+                <i class="fas fa-hotel"></i>
+                <span>Hotel Booking</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+               
+                
+
                 <div class="registration-cards">
                     <div class="card registration-fees-card">
                         <div class="card-header">
@@ -413,13 +586,11 @@
                             <div class="important-notes">
                                 <h4><i class="fas fa-info-circle"></i> Important Notes</h4>
                                 <ul>
-                                    <li>Early bird registration deadline: <strong>November 10, 2025</strong></li>
-                                    <li>Regular registration deadline: <strong>November 28, 2025</strong></li>
+                                    <li>Early bird registration deadline: <strong>10 November 2025</strong></li>
+                                    <li>Regular registration deadline: <strong>22 November 2025</strong></li>
                                     <li>At least one author must register for each accepted paper to be included in the proceedings</li>
-                                    <li>Registration fee includes access to all sessions, conference materials, coffee breaks, and lunch during conference days</li>
-                                    <li>For each additional paper, an extra fee of <strong>$200</strong> will be charged</li>
-                                    <li>Each paper is limited to 12 pages. Extra pages (maximum 2) will be charged at <strong>$100 per page</strong></li>
-                                    <li>All payments made are final and non-refundable under any circumstances</li>
+                                    <li><strong>All payments made are final and non-refundable under any circumstances</strong></li>
+                                    <li>All fees are set in USD. Any bank, card, or e-wallet charges are borne by the payer</li>
                                 </ul>
                             </div>
                         </div>
@@ -435,8 +606,8 @@
                                     <tr>
                                         <th>Registration Type</th>
                                         <th>Conference Materials</th>
-                                        <th>Lunches</th>
                                         <th>Coffee Breaks</th>
+                                        <th>Lunches</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -475,11 +646,15 @@
                         </div>
                         <div class="card-body">
                             <ol class="process-steps">
-                                <li>Download the registration form <a href="./assets/docs/registration-form.pdf">here</a></li>
-                                <li>Fill out the form with your details</li>
-                                <li>Make the payment using one of the available methods</li>
-                                <li>All payments made are final and non-refundable under any circumstances</li>
-                                <li>Email the completed form and payment proof to <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a></li>
+                                <li>Download and complete the registration form <a href="https://forms.gle/a61WXSGuEDrRrbi57">here</a></li>
+                                <li>Pay using one of the available methods:
+                                    <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                                        <li><strong>Bank Transfer (Wire/TT)</strong> - via secure card gateway</li>
+                                        <li><strong>Indonesian E-Wallets (QRIS)</strong> - OVO, GoPay, DANA, LinkAja</li>
+                                        <li><strong>International Credit Card</strong> - for overseas participants</li>
+                                    </ul>
+                                </li>
+                                <li>Email the completed form and payment proof to <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a> (include your name and paper ID)</li>
                                 <li>You will receive a confirmation email with your registration details</li>
                                 <li>For onsite participants, collect your conference kit at the registration desk</li>
                             </ol>
@@ -489,9 +664,41 @@
                                 <p>For any inquiries regarding registration, please contact:</p>
                                 <p><strong>Email:</strong> <a href="mailto:icot2025@ideas-lab.org">icot2025@ideas-lab.org</a></p>
                                 <p><strong>Phone:</strong> +62 897 9400 787</p>
+                                <p><strong>Security Note:</strong> ICOT will never request payment to personal accounts or via messaging apps. Use only official channels listed above.</p>
                             </div>
                         </div>
                     </div>
+                </div>
+                 <!-- Document Links Section -->
+                <div class="document-links" style="margin-top: 40px;">
+                    <h3>
+                        <i class="fas fa-file-contract"></i>
+                        Important Registration Documents
+                    </h3>
+                    <div class="document-buttons">
+                        <a href="./assets/docs/registration-terms-payment.pdf" class="doc-button" target="_blank">
+                            <div class="doc-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <div class="doc-content">
+                                <h4>Registration Terms of Payment</h4>
+                                <p>Complete terms and conditions for registration fees, payment methods, and policies</p>
+                            </div>
+                        </a>
+                        
+                        <a href="./assets/docs/refund-policy.pdf" class="doc-button" target="_blank">
+                            <div class="doc-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="doc-content">
+                                <h4>Refund & Cancellation Policy</h4>
+                                <p>Important information about refunds, cancellations, and substitution policies</p>
+                            </div>
+                        </a>
+                        
+                    </div>
+
+
                 </div>
             </div>
         </section>
@@ -600,6 +807,27 @@
                         menuIcon.classList.add('fa-bars');
                     }
                 }
+            });
+        });
+
+        // Document buttons hover effects
+        const docButtons = document.querySelectorAll('.doc-button');
+        
+        docButtons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Track document downloads
+        document.querySelectorAll('.doc-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const documentName = this.querySelector('h4').textContent;
+                console.log(`Document accessed: ${documentName}`);
             });
         });
     });
